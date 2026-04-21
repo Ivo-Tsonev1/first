@@ -1,0 +1,60 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityUser>
+
+@{
+    ViewData["Title"] = "Управление на потребители";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-white"><i class="bi bi-people-fill"></i> Списък с потребители</h2>
+    </div>
+
+    <div class="card shadow-sm bg-dark text-white">
+        <div class="card-body p-0">
+            <table class="table table-hover table-dark mb-0">
+                <thead>
+                    <tr>
+                        <th>Имейл / Потребител</th>
+                        <th>Действия за роля</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr>
+                            <td class="align-middle">
+                                <div>@user.Email</div>
+                            </td>
+                            <td class="align-middle">
+                                <div class="d-flex gap-2">
+                                    @* Форма за Админ *@
+                                    <form asp-action="AssignAdmin" asp-route-userId="@user.Id" method="post" style="margin:0;">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="bi bi-shield-lock"></i> Направи Админ
+                                        </button>
+                                    </form>
+
+                                    @* Форма за Сервитьор *@
+                                    <form asp-action="AssignWaiter" asp-route-userId="@user.Id" method="post" style="margin:0;">
+                                        <button type="submit" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-person-badge"></i> Направи Сервитьор
+                                        </button> @* ТУК БЕШЕ ГРЕШКАТА: беше </a> *@
+                                    </form>
+
+                                    @* Форма за Изтриване *@
+                                    <form asp-action="DeleteUser" asp-route-userId="@user.Id" method="post" style="margin:0;"
+                                          onsubmit="return confirm('Сигурни ли сте, че искате да изтриете този потребител?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,349 @@
+﻿@model ByteBite.Models.DiningTable
+
+@{
+    ViewData["Title"] = "Create Table";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --success-green: #10b981;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .create-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 3rem 2rem;
+        margin-bottom: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .create-header h1 {
+        margin-bottom: 0.5rem;
+        font-weight: 800;
+        font-size: 2.5rem;
+    }
+
+    .create-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .form-container {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--primary-brown);
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="number"]:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+    }
+
+    .form-group input[type="number"] {
+        font-size: 1.2rem;
+    }
+
+    .info-box {
+        background: #f0f9ff;
+        border-left: 4px solid var(--accent-orange);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .info-box p {
+        margin: 0;
+        color: var(--primary-brown);
+        font-size: 0.95rem;
+    }
+
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        padding: 1.5rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        background: #fafafa;
+        transition: all 0.3s;
+    }
+
+    .checkbox-wrapper:hover {
+        border-color: var(--accent-orange);
+        background: #fff7ed;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        margin-right: 1rem;
+        cursor: pointer;
+        accent-color: var(--accent-orange);
+    }
+
+    .checkbox-wrapper label {
+        margin: 0;
+        margin-bottom: 0;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .btn-submit {
+        flex: 1;
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        background: white;
+        color: var(--primary-brown);
+        border: 2px solid #e2e8f0;
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+    }
+
+    .validation-summary {
+        background: #fee2e2;
+        border-left: 4px solid var(--danger-red);
+        color: var(--danger-red);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .validation-summary ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .validation-summary li {
+        margin: 0.5rem 0;
+    }
+
+    .text-danger {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    .capacity-input-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .capacity-input-wrapper input {
+        flex: 1;
+    }
+
+    .capacity-display {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .seat-badge {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--accent-orange);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 0.9rem;
+        opacity: 0.3;
+        transition: all 0.3s;
+    }
+
+    .seat-badge.active {
+        opacity: 1;
+    }
+
+    @@media (max-width: 768px) {
+        .create-header {
+            padding: 2rem 1rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="create-header">
+    <h1><i class="bi bi-plus-circle me-2"></i>Create New Table</h1>
+    <p>Add a new dining table to your restaurant</p>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        <div class="info-box">
+            <p><i class="bi bi-info-circle me-2"></i>Fill in the table details below. Table number should be unique and capacity is the number of seats.</p>
+        </div>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="validation-summary">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
+            <div class="form-group">
+                <label asp-for="TableNumber" class="control-label">Table Number *</label>
+                <input asp-for="TableNumber" type="number" class="form-control" placeholder="e.g., 1, 2, 3..." min="1" />
+                <span asp-validation-for="TableNumber" class="text-danger"></span>
+                <small style="color: #64748b; display: block; margin-top: 0.5rem;">
+                    <i class="bi bi-lightbulb"></i> Use sequential numbers for easy identification
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Capacity" class="control-label">Seating Capacity *</label>
+                <input asp-for="Capacity" type="number" class="form-control" placeholder="e.g., 4, 6, 8..." min="1" max="20" onchange="updateCapacityDisplay()" onkeyup="updateCapacityDisplay()" />
+                <span asp-validation-for="Capacity" class="text-danger"></span>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: #f0f9ff; border-radius: 8px;">
+                    <small style="color: var(--primary-brown); font-weight: 600;">Seating preview:</small>
+                    <div class="capacity-display" id="capacityDisplay">
+                        <div class="seat-badge active">👥</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-wrapper">
+                    <input type="checkbox" id="isOccupied" name="IsOccupied" value="true" />
+                    <label for="isOccupied">Mark as occupied initially</label>
+                </div>
+                <small style="color: #64748b; display: block; margin-top: 0.75rem;">
+                    <i class="bi bi-info-circle"></i> Only check this if the table is already in use
+                </small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle me-2"></i>Create Table
+                </button>
+                <a asp-action="Index" class="btn-cancel">
+                    <i class="bi bi-arrow-left me-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function updateCapacityDisplay() {
+            const capacity = parseInt(document.querySelector('input[name="Capacity"]').value) || 1;
+            const display = document.getElementById('capacityDisplay');
+            
+            // Limit preview to 8 seats for visual clarity
+            const previewCount = Math.min(capacity, 8);
+            
+            let html = '';
+            for (let i = 0; i < capacity; i++) {
+                html += '<div class="seat-badge ' + (i < previewCount ? 'active' : '') + '">👥</div>';
+            }
+            
+            if (capacity > 8) {
+                html += '<div style="padding-left: 0.5rem; color: #64748b; font-weight: 600;">+' + (capacity - 8) + '</div>';
+            }
+            
+            display.innerHTML = html;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', updateCapacityDisplay);
+    </script>
+}

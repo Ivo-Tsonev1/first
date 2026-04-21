@@ -1,0 +1,184 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+@{
+    ViewData["Title"] = "Създаване на роля";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .page-header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .form-container {
+        max-width: 600px;
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--primary-brown);
+        margin-bottom: 0.75rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus {
+        outline: none;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+    }
+
+    .validation-error {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-cancel {
+        background: white;
+        color: var(--primary-brown);
+        border: 2px solid #e0e0e0;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+    }
+
+    .validation-summary {
+        background: #fee2e2;
+        border-left: 4px solid var(--danger-red);
+        color: var(--danger-red);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .validation-summary ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .validation-summary li {
+        margin: 0.5rem 0;
+    }
+</style>
+
+<div class="page-header">
+    <h1>🆕 Създаване на роля</h1>
+    <p>Добавете нова системна роля</p>
+</div>
+
+<div class="form-container">
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="validation-summary">
+            <strong>Моля, коригирайте следните грешки:</strong>
+            <ul>
+                @foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    @foreach (var error in modelState.Errors)
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="Create" asp-controller="Roles" method="post">
+        <div class="form-group">
+            <label asp-for="Name">Име на роля *</label>
+            <input asp-for="Name" placeholder="Например: Администратор, Персонал, Гост" required>
+            <span asp-validation-for="Name" class="validation-error"></span>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-submit">
+                <span>✓</span> Създай роля
+            </button>
+            <a asp-action="Index" asp-controller="Roles" class="btn btn-cancel">
+                <span>✕</span> Отказ
+            </a>
+        </div>
+    </form>
+</div>

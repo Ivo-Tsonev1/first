@@ -1,0 +1,243 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+@{
+    ViewData["Title"] = "Детайли на роля";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --bg-light: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .page-header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .container-box {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: var(--primary-brown);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .role-badge {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, #a33a0a 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .role-badge h2 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .info-row {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .info-row:last-child {
+        border-bottom: none;
+    }
+
+    .info-label {
+        font-weight: 600;
+        color: var(--primary-brown);
+    }
+
+    .info-value {
+        color: #666;
+        word-break: break-all;
+    }
+
+    .user-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .user-list li {
+        padding: 0.75rem;
+        background: #f8f8f8;
+        border-radius: 6px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .user-list li:last-child {
+        margin-bottom: 0;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #999;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-back {
+        background: white;
+        color: var(--primary-brown);
+        border: 2px solid #e0e0e0;
+    }
+
+    .btn-back:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+    }
+
+    @@media (max-width: 768px) {
+        .container-box {
+            grid-template-columns: 1fr;
+        }
+
+        .info-row {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<div class="page-header">
+    <h1>??? Детайли на роля</h1>
+    <p>Преглед на информацията на ролята</p>
+</div>
+
+<div class="container-box">
+    <div class="card">
+        <div class="role-badge">
+            <h2>@Model.Name</h2>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">ID:</div>
+            <div class="info-value"><code style="background: #f0f0f0; padding: 0.25rem 0.75rem; border-radius: 4px;">@Model.Id</code></div>
+        </div>
+
+        <div class="info-row">
+            <div class="info-label">Тип:</div>
+            <div class="info-value">Системна роля</div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Edit" asp-controller="Roles" asp-route-id="@Model.Id" class="btn btn-primary">
+                <span>??</span> Редактирай
+            </a>
+            <a asp-action="Index" asp-controller="Roles" class="btn btn-back">
+                <span>?</span> Назад
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">
+            <span>??</span> Потребители в тази роля
+        </div>
+
+        @if (ViewBag.UsersInRole != null && ViewBag.UsersInRole.Count > 0)
+        {
+            <ul class="user-list">
+                @foreach (var user in ViewBag.UsersInRole)
+                {
+                    <li>
+                        <span>??</span>
+                        <div>
+                            <div style="font-weight: 600;">@user.UserName</div>
+                            <div style="font-size: 0.85rem; color: #999;">@user.Email</div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <div class="empty-message">
+                <p>Няма потребители в тази роля</p>
+            </div>
+        }
+    </div>
+</div>

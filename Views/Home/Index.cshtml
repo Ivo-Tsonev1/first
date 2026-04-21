@@ -1,0 +1,29 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Начало";
+}
+
+<section class="hero">
+    <div class="container">
+        <h1>Добре дошли в ByteBite!</h1>
+        <p style="font-size:1.5rem; margin:1.5rem 0;">Автентична българска и европейска кухня</p>
+        <a asp-controller="Dishes" asp-action="Index" class="btn btn-primary" style="font-size:1.4rem; padding:1.1rem 2.8rem;">Разгледай менюто</a>
+    </div>
+</section>
+
+<section class="container">
+    <h2 style="text-align:center; margin:3.5rem 0 2rem;">Популярни предложения</h2>
+    <div class="card-grid">
+        @for (int i = 0; i < 4; i++)
+        {
+            <div class="card">
+                <img src="~/images/food.jpg" asp-append-version="true" alt="Храна">
+                <div class="card-content">
+                    <h3>Пица "Маргарита"</h3>
+                    <div class="price">15.00 лв.</div>
+                    <button class="btn-add-to-cart" style="margin-top:10px; cursor:pointer;">Добави в количката</button>
+                </div>
+            </div>
+        }
+    </div>
+</section>

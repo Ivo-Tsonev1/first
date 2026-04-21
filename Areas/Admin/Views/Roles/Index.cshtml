@@ -1,0 +1,305 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IEnumerable<IdentityRole>
+
+@using Microsoft.AspNetCore.Identity
+
+@{
+    ViewData["Title"] = "Управление на роли";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --success-green: #10b981;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .btn-create {
+        background: rgba(255,255,255,0.2);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        border: 2px solid white;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-create:hover {
+        background: white;
+        color: var(--primary-brown);
+    }
+
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: var(--success-green);
+        border-left: 4px solid var(--success-green);
+    }
+
+    .alert-danger {
+        background: #fee2e2;
+        color: var(--danger-red);
+        border-left: 4px solid var(--danger-red);
+    }
+
+    .table-container {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+    }
+
+    .table thead {
+        background: #f8f8f8;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--primary-brown);
+    }
+
+    .table td {
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .table tbody tr:hover {
+        background: #f8f8f8;
+    }
+
+    .role-badge {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-info {
+        background: #e0f2fe;
+        color: #0284c7;
+        border: 1px solid #0284c7;
+    }
+
+    .btn-info:hover {
+        background: #0284c7;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #fee2e2;
+        color: var(--danger-red);
+        border: 1px solid var(--danger-red);
+    }
+
+    .btn-danger:hover {
+        background: var(--danger-red);
+        color: white;
+    }
+
+    .empty-message {
+        text-align: center;
+        padding: 3rem 2rem;
+        color: #999;
+    }
+
+    .empty-message p {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .table-container {
+            padding: 1rem;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        <span>✓</span>
+        <span>@TempData["Success"]</span>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        <span>⚠️</span>
+        <span>@TempData["Error"]</span>
+    </div>
+}
+
+<div class="header">
+    <div>
+        <h1>👤 Управление на роли</h1>
+        <p>Администриране на системни роли</p>
+    </div>
+    <a href="@Url.Action("Create", "Roles")" class="btn-create">
+        <span>➕</span> Нова роля
+    </a>
+</div>
+
+<div class="table-container">
+    @if (Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Роля</th>
+                    <th>ID</th>
+                    <th>Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var role in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="role-badge">@role.Name</span>
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(role.Id) && role.Id.Length > 8)
+                            {
+                                @role.Id.Substring(0, 8)<span style="color: #999;">...</span>
+                            }
+                            else
+                            {
+                                @(role.Id ?? "N/A")
+                            }
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="@Url.Action("Details", "Roles", new { id = role.Id })" class="btn btn-info">
+                                    <span>👁️</span> Преглед
+                                </a>
+                                <a href="@Url.Action("Edit", "Roles", new { id = role.Id })" class="btn btn-primary">
+                                    <span>✏️</span> Редактиране
+                                </a>
+                                <a href="@Url.Action("Delete", "Roles", new { id = role.Id })" class="btn btn-danger">
+                                    <span>🗑️</span> Изтриване
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="empty-message">
+            <p>📋 Няма создадени роли</p>
+            <a href="@Url.Action("Create", "Roles")" style="color: var(--accent-orange); text-decoration: none; font-weight: 600;">
+                Създайте първата роля
+            </a>
+        </div>
+    }
+</div>

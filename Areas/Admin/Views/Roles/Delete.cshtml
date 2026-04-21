@@ -1,0 +1,178 @@
+@using Microsoft.AspNetCore.Identity
+@model IdentityRole
+
+@{
+    ViewData["Title"] = "Изтриване на роля";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+    }
+
+    .page-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .page-header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .form-container {
+        max-width: 600px;
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .warning-box {
+        background: #fee2e2;
+        border-left: 4px solid var(--danger-red);
+        color: var(--danger-red);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .role-info {
+        background: #f8f8f8;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .role-badge {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, #a33a0a 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .user-count {
+        font-size: 0.95rem;
+        color: #666;
+        margin-top: 1rem;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .btn-delete {
+        background: var(--danger-red);
+        color: white;
+    }
+
+    .btn-delete:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-cancel {
+        background: white;
+        color: var(--primary-brown);
+        border: 2px solid #e0e0e0;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+    }
+</style>
+
+<div class="page-header">
+    <h1>??? Изтриване на роля</h1>
+    <p>Потвърдете изтриването на ролята</p>
+</div>
+
+<div class="form-container">
+    <div class="warning-box">
+        <strong>?? Предупреждение!</strong>
+        <p style="margin: 0.75rem 0 0 0;">Това действие не може да бъде отменено. Моля, бъдете сигурни, че искате да изтриете тази роля.</p>
+    </div>
+
+    @if (ViewBag.UsersInRole > 0)
+    {
+        <div style="background: #fef3c7; border-left: 4px solid #f59e0b; color: #92400e; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem;">
+            <strong>?? Не може да се изтрие!</strong>
+            <p style="margin: 0.75rem 0 0 0;">Тази роля има @ViewBag.UsersInRole потребител(и). Преди да я изтриете, преместете потребителите в друга роля.</p>
+        </div>
+    }
+
+    <div class="role-info">
+        <div class="role-badge">@Model.Name</div>
+        <div class="user-count">
+            ?? @ViewBag.UsersInRole потребител(и) в тази роля
+        </div>
+    </div>
+
+    @if (ViewBag.UsersInRole == 0)
+    {
+        <form asp-action="Delete" asp-controller="Roles" method="post">
+            <input type="hidden" asp-for="Id">
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-delete">
+                    <span>???</span> Потвърди изтриването
+                </button>
+                <a asp-action="Index" asp-controller="Roles" class="btn btn-cancel">
+                    <span>?</span> Отказ
+                </a>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Roles" class="btn btn-cancel" style="flex: 1;">
+                <span>?</span> Назад
+            </a>
+        </div>
+    }
+</div>

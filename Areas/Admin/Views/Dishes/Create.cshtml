@@ -1,0 +1,449 @@
+﻿@model ByteBite.Models.Dish
+
+@{
+    ViewData["Title"] = "Create Dish";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --success-green: #10b981;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    .create-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 3rem 2rem;
+        margin-bottom: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .create-header h1 {
+        margin-bottom: 0.5rem;
+        font-weight: 800;
+        font-size: 2.5rem;
+    }
+
+    .create-header p {
+        opacity: 0.9;
+        font-size: 1.1rem;
+    }
+
+    .form-container {
+        background: white;
+        border-radius: 20px;
+        padding: 3rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(0,0,0,0.05);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 2rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--primary-brown);
+        margin-bottom: 0.75rem;
+        font-size: 1rem;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group input[type="email"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: inherit;
+        transition: all 0.3s;
+        box-sizing: border-box;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group input[type="number"]:focus,
+    .form-group input[type="email"]:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: var(--accent-orange);
+        box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .image-upload-wrapper {
+        border: 2px dashed #e2e8f0;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        transition: all 0.3s;
+        background-color: #fafafa;
+        cursor: pointer;
+    }
+
+    .image-upload-wrapper.active {
+        border-color: var(--accent-orange);
+        background-color: #fff7ed;
+    }
+
+    .image-upload-wrapper input[type="file"] {
+        display: none;
+    }
+
+    .upload-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .upload-text {
+        color: var(--primary-brown);
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .upload-hint {
+        color: #64748b;
+        font-size: 0.9rem;
+    }
+
+    .image-preview {
+        margin-top: 1rem;
+        text-align: center;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 300px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .preview-actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .btn-remove-image {
+        background: var(--danger-red);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+    .btn-remove-image:hover {
+        opacity: 0.9;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+    }
+
+    @@media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+
+        .create-header {
+            padding: 2rem 1rem;
+        }
+
+        .form-container {
+            padding: 1.5rem;
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid #e2e8f0;
+    }
+
+    .btn-submit {
+        flex: 1;
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+        border: none;
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-cancel {
+        flex: 1;
+        background: white;
+        color: var(--primary-brown);
+        border: 2px solid #e2e8f0;
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .btn-cancel:hover {
+        border-color: var(--accent-orange);
+        color: var(--accent-orange);
+    }
+
+    .validation-summary {
+        background: #fee2e2;
+        border-left: 4px solid var(--danger-red);
+        color: var(--danger-red);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .validation-summary ul {
+        margin: 0;
+        padding-left: 1.5rem;
+    }
+
+    .validation-summary li {
+        margin: 0.5rem 0;
+    }
+
+    .text-danger {
+        color: var(--danger-red);
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    .helper-text {
+        color: #64748b;
+        font-size: 0.85rem;
+        display: block;
+        margin-top: 0.5rem;
+    }
+
+    .alert-warning {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        color: #92400e;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+    }
+
+    .alert-warning i {
+        margin-right: 0.75rem;
+    }
+</style>
+
+<div class="create-header">
+    <h1><i class="bi bi-plus-circle me-2"></i>Create New Dish</h1>
+    <p>Add a new dish to your menu with image and details</p>
+</div>
+
+<div class="container">
+    <div class="form-container">
+        @if (ViewBag.WarningMessage != null)
+        {
+            <div class="alert-warning">
+                <i class="bi bi-exclamation-triangle"></i>
+                <strong>@ViewBag.WarningMessage</strong>
+                <br />
+                <a asp-controller="Categories" asp-action="Create" style="color: var(--accent-orange); font-weight: 600; text-decoration: none;">
+                    Create a Category First
+                </a>
+            </div>
+        }
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="validation-summary">
+                <i class="bi bi-exclamation-circle"></i>
+                <strong>Error:</strong> @ViewBag.ErrorMessage
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Count > 0)
+        {
+            <div class="validation-summary">
+                <strong>Please fix the following errors:</strong>
+                <ul>
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        @foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
+        <form asp-action="Create" asp-controller="Dishes" method="post" enctype="multipart/form-data">
+            <div class="form-row">
+                <div>
+                    <div class="form-group">
+                        <label asp-for="Title">Dish Name <span style="color: var(--danger-red);">*</span></label>
+                        <input type="text" asp-for="Title" class="form-control" placeholder="e.g., Caesar Salad" required />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                        <span class="helper-text"><i class="bi bi-info-circle"></i> Enter a descriptive name</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Price">Price (лв.) <span style="color: var(--danger-red);">*</span></label>
+                        <input type="number" asp-for="Price" step="0.01" class="form-control" placeholder="e.g., 12.50" required />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                        <span class="helper-text"><i class="bi bi-info-circle"></i> Enter the price in BGN</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="CategoryId">Category <span style="color: var(--danger-red);">*</span></label>
+                        <select asp-for="CategoryId" asp-items="@(ViewData["CategoryId"] as SelectList)" class="form-control" required>
+                            <option value="">-- Select Category --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        <span class="helper-text"><i class="bi bi-info-circle"></i> Choose a category</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <label class="control-label">Upload Image</label>
+                        <div class="image-upload-wrapper" id="imageUploadWrapper" onclick="document.getElementById('imageFile').click()">
+                            <div class="upload-icon">📸</div>
+                            <div class="upload-text">Click to upload image</div>
+                            <div class="upload-hint">PNG, JPG, GIF (max 5MB)</div>
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" onchange="previewImage(event)" />
+                        </div>
+
+                        <div class="image-preview" id="imagePreview" style="display: none;">
+                            <img id="previewImg" src="" alt="Preview">
+                            <div class="preview-actions">
+                                <button type="button" class="btn-remove-image" onclick="removeImage()">Remove Image</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-control" placeholder="Enter dish description..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+                <span class="helper-text"><i class="bi bi-info-circle"></i> Optional: describe the dish in detail</span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle me-2"></i>Create Dish
+                </button>
+                <a asp-action="Index" asp-controller="Dishes" class="btn-cancel">
+                    <i class="bi bi-arrow-left me-2"></i>Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            
+            if (file) {
+                // Validate file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    event.target.value = '';
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file');
+                    event.target.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('imageUploadWrapper').classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            document.getElementById('imageFile').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('imageUploadWrapper').classList.remove('active');
+        }
+
+        // Drag and drop
+        const wrapper = document.getElementById('imageUploadWrapper');
+        if (wrapper) {
+            wrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                wrapper.classList.add('active');
+            });
+
+            wrapper.addEventListener('dragleave', () => {
+                wrapper.classList.remove('active');
+            });
+
+            wrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                wrapper.classList.remove('active');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    document.getElementById('imageFile').files = files;
+                    previewImage({ target: { files: files } });
+                }
+            });
+        }
+    </script>
+}

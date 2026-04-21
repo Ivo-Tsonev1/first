@@ -1,0 +1,374 @@
+﻿@model IEnumerable<ByteBite.Models.Dish>
+
+@{
+    ViewData["Title"] = "Меню";
+}
+
+<style>
+    /* Menu Hero Section */
+    .menu-hero {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1600') center/cover;
+        color: white;
+        padding: 8rem 1rem 6rem;
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+        .menu-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+    /* Menu Controls Section */
+    .menu-controls {
+        background: white;
+        padding: 2.5rem 1rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        margin-bottom: 3rem;
+    }
+
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+        padding: 0.7rem 1.5rem;
+        border-radius: 999px;
+        background: #f5f0ea;
+        border: 2px solid #e0d5c8;
+        color: #4a2f1f;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+        .filter-btn:hover {
+            background: #e6d9cc;
+            border-color: #c2410c;
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #c2410c;
+            color: white;
+            border-color: #c2410c;
+            box-shadow: 0 4px 12px rgba(194, 65, 12, 0.3);
+        }
+
+    .search-container {
+        position: relative;
+        flex: 1;
+        max-width: 500px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3.2rem;
+        border: 2px solid #d9c7b8;
+        border-radius: 50px;
+        font-size: 1.05rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #c2410c;
+            box-shadow: 0 0 0 4px rgba(194,65,12,0.15);
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9c7a5e;
+        font-size: 1.2rem;
+    }
+
+    .search-sort-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .sort-container {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+    }
+
+    .sort-select {
+        padding: 0.7rem 1rem;
+        border: 2px solid #d9c7b8;
+        border-radius: 8px;
+        font-size: 1rem;
+        background: white;
+        color: #4a2f1f;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #c2410c;
+            box-shadow: 0 0 0 4px rgba(194,65,12,0.15);
+        }
+
+    /* Menu Content */
+    .menu-content {
+        margin-bottom: 3rem;
+    }
+
+    /* No results */
+    .no-results {
+        text-align: center;
+        padding: 4rem 1rem;
+        color: #999;
+        font-size: 1.1rem;
+    }
+
+    /* Cart styles */
+    .cart-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .cart-icon {
+        font-size: 1.6rem;
+    }
+
+    .cart-count {
+        background: #c2410c;
+        color: white;
+        font-size: 0.75rem;
+        font-weight: bold;
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .cart-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.18);
+        min-width: 320px;
+        max-height: 380px;
+        overflow-y: auto;
+        z-index: 100;
+        margin-top: 1rem;
+        display: none;
+        padding: 1rem;
+    }
+
+        .cart-dropdown.active {
+            display: block;
+        }
+
+    .cart-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .cart-total {
+        margin-top: 1rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-align: right;
+    }
+
+    .add-to-cart-btn {
+        background: #c2410c;
+        color: white;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+
+        .add-to-cart-btn:hover {
+            background: #a33a0a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(194, 65, 12, 0.2);
+        }
+
+    @@media (max-width: 850px) {
+        .cart-wrapper
+
+    {
+        margin-left: auto;
+    }
+
+    .menu-hero {
+        padding: 5rem 1rem 3.5rem;
+    }
+
+    .menu-controls {
+        padding: 2rem 1rem;
+    }
+
+    .filters {
+        gap: 0.7rem;
+    }
+
+    .filter-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .search-sort-container {
+        gap: 0.8rem;
+    }
+
+    }
+
+    @@media (max-width: 600px) {
+        .menu-hero
+
+    {
+        padding: 3.5rem 1rem 2.5rem;
+    }
+
+    .menu-hero h1 {
+        font-size: 2rem;
+    }
+
+    .menu-hero p {
+        font-size: 1.05rem;
+    }
+
+    .filters {
+        gap: 0.6rem;
+    }
+
+    .filter-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .search-sort-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .sort-container {
+        justify-content: center;
+    }
+
+    }
+</style>
+ 
+<main>
+    <section class="menu-hero">
+        <div class="container">
+            <h1>Нашето Меню</h1>
+            <p>Класически вкусове, пресни съставки и много любов във всяко ястие</p>
+            @* Бутон за администратори (опционално) *@
+            <a asp-action="Create" class="btn btn-sm btn-outline-secondary" style="margin-top: 1rem;">+ Добави ново ястие</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="menu-controls">
+            <div class="filters">
+                <button class="filter-btn active" data-category="all">Всички</button>
+                <button class="filter-btn" data-category="Салати">Салати</button>
+                <button class="filter-btn" data-category="Супи">Супи</button>
+                <button class="filter-btn" data-category="Основни">Основни</button>
+                <button class="filter-btn" data-category="Десерти">Десерти</button>
+                <button class="filter-btn" data-category="Напитки">Напитки</button>
+            </div>
+
+            <div class="search-sort-container">
+                <div class="search-container">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="Търси ястие...">
+                </div>
+
+                <div class="sort-container">
+                    <label for="sortSelect" style="font-weight: 600; color: #4a2f1f; margin-right: 0.5rem;">Подреди по:</label>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="default">По подразбиране</option>
+                        <option value="price-asc">Цена: ниска към висока</option>
+                        <option value="price-desc">Цена: висока към ниска</option>
+                        <option value="name-asc">Име: А-Я</option>
+                        <option value="name-desc">Име: Я-А</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-content">
+            <div class="card-grid" id="menuGrid">
+                @foreach (var item in Model)
+                {
+                    @* Добавяме data-attributes, за да работят JS филтрите и сортирането ти *@
+                    <div class="card" data-category="@item.Category?.Name" data-price="@item.Price" data-name="@item.Title">
+                        <img src="@(string.IsNullOrEmpty(item.ImagePath) ? "/images/default-food.jpg" : item.ImagePath)"
+                             alt="@item.Title"
+                             asp-append-version="true">
+
+                        <div class="card-content">
+                            <h3>@item.Title</h3>
+                            <p class="description">@item.Description</p>
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                                <span class="price" style="font-weight: bold; color: #e67e22; font-size: 1.2rem;">
+                                    @item.Price.ToString("F2") лв.
+                                </span>
+                                <button class="btn-add-to-cart"
+                                        data-id="@item.Id"
+                                        data-title="@item.Title"
+                                        data-price="@item.Price">
+                                    🛒 Добави
+                                </button>
+                            </div>
+
+                            @* Линк за редакция (вижда се само ако е нужно) *@
+                            <div class="admin-actions" style="margin-top: 10px; font-size: 0.8rem; border-top: 1px dashed #ccc; pt-2;">
+                                <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div id="noResults" class="no-results hidden">
+                <p>😕 Няма намерени ястия по вашата заявка...</p>
+            </div>
+        </section>
+    </div>
+</main>

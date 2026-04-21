@@ -1,0 +1,842 @@
+﻿@model IEnumerable<ByteBite.Models.DiningTable>
+
+@{
+    ViewData["Title"] = "Персонал - Табло";
+    Layout = "_Layout";
+}
+
+<style>
+    :root {
+        --primary-brown: #2b140d;
+        --accent-orange: #c2410c;
+        --accent-hover: #a33a0a;
+        --success-green: #10b981;
+        --danger-red: #ef4444;
+        --bg-light: #f8fafc;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: var(--bg-light);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .dashboard-header {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 2.5rem 2rem;
+        margin-bottom: 2rem;
+        border-radius: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .dashboard-header p {
+        opacity: 0.9;
+        margin: 0.5rem 0 0 0;
+    }
+
+    .time-badge {
+        background: rgba(255,255,255,0.2);
+        padding: 0.75rem 1.5rem;
+        border-radius: 50px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .table-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 3px solid #e0e0e0;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .table-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    }
+
+    .table-card.selected {
+        border-color: var(--accent-orange);
+        background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%);
+    }
+
+    .table-status {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px currentColor;
+        transition: all 0.3s ease;
+    }
+
+    .table-status.free {
+        background-color: var(--success-green);
+        color: var(--success-green);
+    }
+
+    .table-status.occupied {
+        background-color: var(--danger-red);
+        color: var(--danger-red);
+    }
+
+    .table-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: var(--primary-brown);
+        margin: 0.5rem 0;
+    }
+
+    .table-capacity {
+        font-size: 0.85rem;
+        color: #666;
+        margin-top: 0.5rem;
+    }
+
+    .main-container {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .panel {
+        background: white;
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .panel-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: var(--primary-brown);
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .order-item {
+        background: #f8f8f8;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-item-name {
+        font-weight: 600;
+        color: var(--primary-brown);
+    }
+
+    .order-item-qty {
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .order-item-price {
+        color: var(--accent-orange);
+        font-weight: bold;
+        min-width: 80px;
+        text-align: right;
+    }
+
+    .remove-btn {
+        background: none;
+        border: none;
+        color: var(--danger-red);
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0 0.5rem;
+        margin-left: 0.5rem;
+    }
+
+    .remove-btn:hover {
+        transform: scale(1.2);
+    }
+
+    .order-total {
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1rem;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .empty-order {
+        text-align: center;
+        padding: 2rem 1rem;
+        color: #999;
+        background: #f8f8f8;
+        border-radius: 8px;
+    }
+
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-hover) 100%);
+        color: white;
+        grid-column: 1 / -1;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(194, 65, 12, 0.3);
+    }
+
+    .btn-success {
+        background: white;
+        border: 2px solid var(--success-green);
+        color: var(--success-green);
+    }
+
+    .btn-success:hover:not(:disabled) {
+        background: var(--success-green);
+        color: white;
+    }
+
+    .btn-danger {
+        background: white;
+        border: 2px solid var(--danger-red);
+        color: var(--danger-red);
+    }
+
+    .btn-danger:hover:not(:disabled) {
+        background: var(--danger-red);
+        color: white;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 2000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.7);
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 80vh;
+        overflow-y: auto;
+        animation: slideUp 0.3s ease;
+    }
+
+    @@keyframes slideUp {
+        from { transform: translateY(20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+        background: linear-gradient(135deg, var(--primary-brown) 0%, #1a0f0a 100%);
+        color: white;
+        border-radius: 12px 12px 0 0;
+    }
+
+    .modal-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        padding: 0;
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+    }
+
+    .dish-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem;
+        background: #f8f8f8;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .dish-item:hover {
+        background: #f0f0f0;
+        box-shadow: 0 4px 12px rgba(194, 65, 12, 0.15);
+    }
+
+    .dish-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: #e0e0e0;
+    }
+
+    .dish-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .dish-name {
+        font-weight: 600;
+        color: var(--primary-brown);
+    }
+
+    .dish-desc {
+        font-size: 0.85rem;
+        color: #666;
+    }
+
+    .dish-price {
+        color: var(--accent-orange);
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .qty-control {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        margin-top: 0.5rem;
+    }
+
+    .qty-btn {
+        background: var(--primary-brown);
+        color: white;
+        border: none;
+        width: 26px;
+        height: 26px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .qty-btn:hover {
+        background: var(--accent-orange);
+    }
+
+    .qty-input {
+        width: 45px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 0.25rem;
+        font-weight: 600;
+    }
+
+    .add-dish-btn {
+        background: var(--accent-orange);
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        width: 100%;
+        transition: all 0.3s;
+    }
+
+    .add-dish-btn:hover {
+        background: var(--accent-hover);
+    }
+
+    .bill-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .bill-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        background: var(--primary-brown);
+        color: white;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin: 1rem 0;
+    }
+
+    .bill-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .alert-msg {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .alert-success {
+        background: #d1fae5;
+        color: var(--success-green);
+    }
+
+    .alert-error {
+        background: #fee2e2;
+        color: var(--danger-red);
+    }
+
+    .icon {
+        font-size: 1.1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .main-container {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .table-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        }
+
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+
+        .btn-primary {
+            grid-column: 1;
+        }
+    }
+</style>
+
+<div class="dashboard-header">
+    <div>
+        <h1>👨‍💼 Staff Dashboard</h1>
+        <p>Управление на @Model.Count() маси</p>
+    </div>
+    <div class="time-badge">
+        <span class="icon">🕐</span>
+        <span id="currentTime">@DateTime.Now.ToString("HH:mm")</span>
+    </div>
+</div>
+
+<div id="messageContainer"></div>
+
+<div class="main-container">
+    <div>
+        <div class="panel-title">
+            <span class="icon">🍽️</span>
+            <span>Карта на залата</span>
+            <a href="@Url.Action("Create", "DiningTables")" style="margin-left: auto; font-size: 0.9rem; color: var(--accent-orange); text-decoration: none; font-weight: normal;">+ Нова маса</a>
+        </div>
+
+        <div class="table-grid" id="tableGrid">
+            @foreach (var table in Model)
+            {
+                <div class="table-card" 
+                     onclick="selectTable(this, @table.Id, @table.TableNumber)" 
+                     id="table-@table.Id">
+                    <div class="table-status @(table.IsOccupied ? "occupied" : "free")"></div>
+                    <div class="table-number">@table.TableNumber</div>
+                    <div class="table-capacity">@table.Capacity мест@(table.Capacity == 1 ? "" : "а")</div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div>
+        <div class="panel">
+            <div class="panel-title" style="margin-bottom: 1.5rem;">
+                <span class="icon">📋</span>
+                <span id="selectedTableTitle">Изберете маса</span>
+            </div>
+
+            <button class="btn btn-primary" id="addItemBtn" disabled onclick="openDishesModal()">
+                <span class="icon">➕</span> Добави ястие
+            </button>
+
+            <div id="orderList">
+                <div class="empty-order">Няма активна поръчка</div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" id="billBtn" disabled onclick="showBill()">
+                    <span class="icon">🧾</span> Сметка
+                </button>
+                <button class="btn btn-danger" id="releaseBtn" disabled onclick="releaseTable()">
+                    <span class="icon">🔓</span> Освободи
+                </button>
+            </div>
+
+            <div style="margin-top: 1.5rem; text-align: center; border-top: 1px solid #e0e0e0; padding-top: 1rem;">
+                <a id="editLink" href="#" style="color: var(--accent-orange); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+                    ⚙️ Редактиране
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dishes Modal -->
+<div id="dishesModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Избор на ястие</h2>
+            <button class="modal-close" onclick="closeDishesModal()">✕</button>
+        </div>
+        <div class="modal-body" id="dishesList">
+            <div style="text-align: center; padding: 2rem; color: #999;">Зареждане...</div>
+        </div>
+    </div>
+</div>
+
+<!-- Bill Modal -->
+<div id="billModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Сметка - Маса <span id="billTableNo"></span></h2>
+            <button class="modal-close" onclick="closeBillModal()">✕</button>
+        </div>
+        <div class="modal-body" id="billContent">
+            <div style="text-align: center; padding: 2rem; color: #999;">Зареждане...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentTableId = null;
+    let currentOrderId = null;
+
+    // Update time
+    setInterval(() => {
+        document.getElementById('currentTime').textContent = new Date().toLocaleTimeString('bg-BG', {hour:'2-digit', minute:'2-digit'});
+    }, 60000);
+
+    // Function to update table status indicator
+    function updateTableStatus(tableId, isOccupied) {
+        const tableCard = document.getElementById(`table-${tableId}`);
+        if (!tableCard) return;
+        
+        const statusDot = tableCard.querySelector('.table-status');
+        if (!statusDot) return;
+
+        if (isOccupied) {
+            statusDot.classList.remove('free');
+            statusDot.classList.add('occupied');
+        } else {
+            statusDot.classList.remove('occupied');
+            statusDot.classList.add('free');
+        }
+    }
+
+    function selectTable(el, id, num) {
+        document.querySelectorAll('.table-card').forEach(e => e.classList.remove('selected'));
+        el.classList.add('selected');
+        currentTableId = id;
+        document.getElementById('selectedTableTitle').textContent = `Маса ${num}`;
+        document.getElementById('editLink').href = `/Waiter/DiningTables/Edit/${id}`;
+        document.getElementById('addItemBtn').disabled = false;
+        loadOrders(id);
+    }
+
+    function loadOrders(tableId) {
+        fetch(`/Waiter/DiningTables/GetOrders?id=${tableId}`)
+            .then(r => r.json())
+            .then(data => {
+                const list = document.getElementById('orderList');
+                const hasItems = data.items && data.items.length > 0;
+
+                // Update table status dot based on items
+                updateTableStatus(tableId, hasItems);
+
+                if (hasItems) {
+                    let html = '';
+                    data.items.forEach(item => {
+                        html += `<div class="order-item">
+                            <div>
+                                <div class="order-item-name">${item.dishName}</div>
+                                <div class="order-item-qty">x${item.quantity}</div>
+                            </div>
+                            <div class="order-item-price">${item.subtotal.toFixed(2)} лв.</div>
+                            <button class="remove-btn" onclick="removeItem(${item.itemId}, ${tableId})">✕</button>
+                        </div>`;
+                    });
+                    html += `<div class="order-total"><span>Общо:</span><span>${data.total.toFixed(2)} лв.</span></div>`;
+                    list.innerHTML = html;
+                    document.getElementById('billBtn').disabled = false;
+                    document.getElementById('releaseBtn').disabled = false;
+                } else {
+                    list.innerHTML = '<div class="empty-order">Няма активна поръчка</div>';
+                    document.getElementById('billBtn').disabled = true;
+                    document.getElementById('releaseBtn').disabled = true;
+                }
+            })
+            .catch(e => {
+                console.error(e);
+                showMsg('Грешка при зареждане', 'error');
+            });
+    }
+
+    function openDishesModal() {
+        if (!currentTableId) {
+            showMsg('Изберете маса', 'error');
+            return;
+        }
+        document.getElementById('dishesModal').classList.add('show');
+        document.getElementById('dishesList').innerHTML = '<div style="text-align: center; padding: 2rem;">Зареждане...</div>';
+
+        fetch('/Waiter/DiningTables/GetDishes')
+            .then(r => r.json())
+            .then(dishes => {
+                let html = '';
+                dishes.forEach(d => {
+                    html += `<div class="dish-item">
+                        <img src="${d.imagePath || '/images/placeholder.jpg'}" alt="${d.title}" class="dish-image" onerror="this.src='/images/placeholder.jpg'">
+                        <div class="dish-info">
+                            <div class="dish-name">${d.title}</div>
+                            <div class="dish-desc">${d.description || 'Предложение'}</div>
+                            <div class="dish-price">${d.price.toFixed(2)} лв.</div>
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="updateQty(${d.id}, -1)">−</button>
+                                <input type="text" id="qty-${d.id}" class="qty-input" value="1" readonly>
+                                <button class="qty-btn" onclick="updateQty(${d.id}, 1)">+</button>
+                            </div>
+                            <button class="add-dish-btn" onclick="addDish(${d.id}, '${d.title.replace(/'/g, "\\'")}', ${d.price})">Добави</button>
+                        </div>
+                    </div>`;
+                });
+                document.getElementById('dishesList').innerHTML = html;
+            })
+            .catch(e => {
+                console.error(e);
+                document.getElementById('dishesList').innerHTML = '<div class="alert-error"><span class="icon">⚠️</span> Грешка при зареждане</div>';
+            });
+    }
+
+    function updateQty(dishId, change) {
+        const inp = document.getElementById(`qty-${dishId}`);
+        let val = Math.max(1, (parseInt(inp.value) || 1) + change);
+        inp.value = val;
+    }
+
+    function closeDishesModal() {
+        document.getElementById('dishesModal').classList.remove('show');
+    }
+
+    function addDish(dishId, name, price) {
+        const qty = parseInt(document.getElementById(`qty-${dishId}`).value) || 1;
+        fetch('/Waiter/DiningTables/AddItem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: JSON.stringify({tableId: currentTableId, dishId, quantity: qty})
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                showMsg('Ястието е добавено', 'success');
+                document.getElementById(`qty-${dishId}`).value = 1;
+                // Update table status immediately
+                updateTableStatus(currentTableId, true);
+                loadOrders(currentTableId);
+            } else {
+                showMsg(d.message || 'Грешка', 'error');
+            }
+        })
+        .catch(e => showMsg('Грешка при добавяне', 'error'));
+    }
+
+    function removeItem(itemId, tableId) {
+        if (!confirm('Премахни?')) return;
+        fetch('/Waiter/DiningTables/RemoveItem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: JSON.stringify({itemId, tableId})
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                loadOrders(tableId);
+            }
+        })
+        .catch(e => showMsg('Грешка', 'error'));
+    }
+
+    function showBill() {
+        if (!currentTableId) return;
+        fetch(`/Waiter/DiningTables/GetBill?id=${currentTableId}`)
+            .then(r => r.json())
+            .then(data => {
+                currentOrderId = data.orderId;
+                let html = '';
+                data.items.forEach(i => {
+                    html += `<div class="bill-item">
+                        <div>
+                            <div style="font-weight: 600; color: var(--primary-brown);">${i.dishName}</div>
+                            <div style="color: #666; font-size: 0.9rem;">x${i.quantity}</div>
+                        </div>
+                        <div style="font-weight: 600; color: var(--accent-orange);">${i.subtotal.toFixed(2)} лв.</div>
+                    </div>`;
+                });
+                html += `<div class="bill-total"><span>ОБЩО:</span><span>${data.total.toFixed(2)} лв.</span></div>`;
+                html += `<div class="bill-actions">
+                    <button class="btn btn-success" onclick="payment(${data.orderId}, ${data.tableId})"><span class="icon">💳</span> Плащане</button>
+                    <button class="btn btn-danger" onclick="closeBillModal()"><span class="icon">✕</span> Отказ</button>
+                </div>`;
+                document.getElementById('billContent').innerHTML = html;
+                document.getElementById('billTableNo').textContent = currentTableId;
+                document.getElementById('billModal').classList.add('show');
+            })
+            .catch(e => showMsg('Грешка при генериране на сметката', 'error'));
+    }
+
+    function closeBillModal() {
+        document.getElementById('billModal').classList.remove('show');
+    }
+
+    function payment(orderId, tableId) {
+        fetch('/Waiter/DiningTables/ProcessPayment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: JSON.stringify({orderId, tableId})
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                closeBillModal();
+                showMsg('Плащане успешно', 'success');
+                // Update table status to free immediately
+                updateTableStatus(tableId, false);
+                loadOrders(tableId);
+            }
+        })
+        .catch(e => showMsg('Грешка при плащане', 'error'));
+    }
+
+    function releaseTable() {
+        if (!currentTableId || !confirm('Освободи масата?')) return;
+        fetch('/Waiter/DiningTables/ReleaseTable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('input[name="__RequestVerificationToken"]')?.value || ''
+            },
+            body: JSON.stringify({tableId: currentTableId})
+        })
+        .then(r => r.json())
+        .then(d => {
+            if (d.success) {
+                showMsg('Маса освободена', 'success');
+                // Update table status to free immediately
+                updateTableStatus(currentTableId, false);
+                loadOrders(currentTableId);
+            }
+        })
+        .catch(e => showMsg('Грешка', 'error'));
+    }
+
+    function showMsg(msg, type) {
+        const container = document.getElementById('messageContainer');
+        const icon = type === 'success' ? '✓' : '⚠️';
+        container.innerHTML = `<div class="alert-msg alert-${type}"><span class="icon">${icon}</span>${msg}</div>`;
+        setTimeout(() => container.innerHTML = '', 3000);
+    }
+</script>
