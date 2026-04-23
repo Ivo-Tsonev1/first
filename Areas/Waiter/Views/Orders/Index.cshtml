@@ -1,59 +1,88 @@
-п»ї@model IEnumerable<ByteBite.Models.Order>
+@model IEnumerable<ByteBite.Models.Order>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Поръчки";
 }
 
-<h1>Index</h1>
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="bi bi-receipt"></i> Поръчки</h1>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Нова поръчка
+                </a>
+            </div>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.OrderTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsPaid)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TotalPrice)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiningTable)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Waiter)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrderTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPaid)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TotalPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiningTable.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Waiter.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="container content-wrapper">
+        @if (Model.Count() == 0)
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h2>Няма поръчки</h2>
+                <p>Всички поръчки ще се появят тук</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-clock"></i> Час</th>
+                            <th><i class="bi bi-check-circle"></i> Статус</th>
+                            <th><i class="bi bi-currency-dollar"></i> Цена</th>
+                            <th><i class="bi bi-table"></i> Маса</th>
+                            <th><i class="bi bi-person"></i> Келнер</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge badge-time">@Html.DisplayFor(modelItem => item.OrderTime)</span>
+                                </td>
+                                <td>
+                                    @if (item.IsPaid)
+                                    {
+                                        <span class="badge badge-success">Платена</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-warning">Непокрита</span>
+                                    }
+                                </td>
+                                <td>
+                                    <span class="price">@Html.DisplayFor(modelItem => item.TotalPrice) лв.</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-info">Маса @Html.DisplayFor(modelItem => item.DiningTable.Id)</span>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Waiter.Id)
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="Редактирай">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-icon" title="Детали">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-icon btn-icon-danger" title="Изтрий">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

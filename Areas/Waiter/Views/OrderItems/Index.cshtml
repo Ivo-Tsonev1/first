@@ -1,47 +1,73 @@
-п»ї@model IEnumerable<ByteBite.Models.OrderItem>
+@model IEnumerable<ByteBite.Models.OrderItem>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Позиции на поръчки";
 }
 
-<h1>Index</h1>
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="bi bi-list-ul"></i> Позиции на поръчки</h1>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Нова позиция
+                </a>
+            </div>
+        </div>
+    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Order)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Dish)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Order.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dish.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+    <div class="container content-wrapper">
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h2>Няма позиции</h2>
+                <p>Позициите от поръчките ще се появят тук</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th><i class="bi bi-receipt"></i> Поръчка</th>
+                            <th><i class="bi bi-egg-fried"></i> Ястие</th>
+                            <th><i class="bi bi-hash"></i> Количество</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge badge-info">Поръчка @Html.DisplayFor(modelItem => item.Order.Id)</span>
+                                </td>
+                                <td>
+                                    <span class="category-name">@Html.DisplayFor(modelItem => item.Dish.Title)</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-time">@Html.DisplayFor(modelItem => item.Quantity) бр.</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="Редактирай">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-icon" title="Детали">
+                                            <i class="bi bi-eye-fill"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-icon btn-icon-danger" title="Изтрий">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

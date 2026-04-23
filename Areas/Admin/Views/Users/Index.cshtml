@@ -1,60 +1,73 @@
-п»ї@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @model IEnumerable<IdentityUser>
 
 @{
-    ViewData["Title"] = "РЈРїСЂР°РІР»РµРЅРёРµ РЅР° РїРѕС‚СЂРµР±РёС‚РµР»Рё";
+    ViewData["Title"] = "Управление на потребители";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-white"><i class="bi bi-people-fill"></i> РЎРїРёСЃСЉРє СЃ РїРѕС‚СЂРµР±РёС‚РµР»Рё</h2>
+<div class="page-wrapper">
+    <div class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1><i class="bi bi-people-fill"></i> Потребители</h1>
+            </div>
+        </div>
     </div>
 
-    <div class="card shadow-sm bg-dark text-white">
-        <div class="card-body p-0">
-            <table class="table table-hover table-dark mb-0">
-                <thead>
-                    <tr>
-                        <th>РРјРµР№Р» / РџРѕС‚СЂРµР±РёС‚РµР»</th>
-                        <th>Р”РµР№СЃС‚РІРёСЏ Р·Р° СЂРѕР»СЏ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var user in Model)
-                    {
+    <div class="container content-wrapper">
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="bi bi-inbox"></i>
+                <h2>Няма потребители</h2>
+                <p>Потребителите ще се появят тук</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
                         <tr>
-                            <td class="align-middle">
-                                <div>@user.Email</div>
-                            </td>
-                            <td class="align-middle">
-                                <div class="d-flex gap-2">
-                                    @* Р¤РѕСЂРјР° Р·Р° РђРґРјРёРЅ *@
-                                    <form asp-action="AssignAdmin" asp-route-userId="@user.Id" method="post" style="margin:0;">
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
-                                            <i class="bi bi-shield-lock"></i> РќР°РїСЂР°РІРё РђРґРјРёРЅ
-                                        </button>
-                                    </form>
-
-                                    @* Р¤РѕСЂРјР° Р·Р° РЎРµСЂРІРёС‚СЊРѕСЂ *@
-                                    <form asp-action="AssignWaiter" asp-route-userId="@user.Id" method="post" style="margin:0;">
-                                        <button type="submit" class="btn btn-sm btn-outline-info">
-                                            <i class="bi bi-person-badge"></i> РќР°РїСЂР°РІРё РЎРµСЂРІРёС‚СЊРѕСЂ
-                                        </button> @* РўРЈРљ Р‘Р•РЁР• Р“Р Р•РЁРљРђРўРђ: Р±РµС€Рµ </a> *@
-                                    </form>
-
-                                    @* Р¤РѕСЂРјР° Р·Р° РР·С‚СЂРёРІР°РЅРµ *@
-                                    <form asp-action="DeleteUser" asp-route-userId="@user.Id" method="post" style="margin:0;"
-                                          onsubmit="return confirm('РЎРёРіСѓСЂРЅРё Р»Рё СЃС‚Рµ, С‡Рµ РёСЃРєР°С‚Рµ РґР° РёР·С‚СЂРёРµС‚Рµ С‚РѕР·Рё РїРѕС‚СЂРµР±РёС‚РµР»?');">
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                            <th><i class="bi bi-envelope"></i> Имейл / Потребител</th>
+                            <th>Действия</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="category-name">@user.Email</span>
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <form asp-action="AssignAdmin" asp-route-userId="@user.Id" method="post" style="display:inline;">
+                                            <button type="submit" class="btn-icon" title="Направи админ">
+                                                <i class="bi bi-shield-lock"></i>
+                                            </button>
+                                        </form>
+
+                                        <form asp-action="AssignWaiter" asp-route-userId="@user.Id" method="post" style="display:inline;">
+                                            <button type="submit" class="btn-icon" title="Направи келнер">
+                                                <i class="bi bi-person-badge"></i>
+                                            </button>
+                                        </form>
+
+                                        <form asp-action="DeleteUser" asp-route-userId="@user.Id" method="post" style="display:inline;"
+                                              onsubmit="return confirm('Сигурни ли сте, че искате да изтриете този потребител?');">
+                                            <button type="submit" class="btn-icon btn-icon-danger" title="Изтрий">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
     </div>
 </div>

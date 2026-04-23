@@ -1,27 +1,27 @@
-п»ї@{
+@{
     Layout = "_Layout";
-    ViewData["Title"] = "РќР°С‡Р°Р»Рѕ";
+    ViewData["Title"] = "Начало";
 }
 
 <section class="hero">
     <div class="container">
-        <h1>Р”РѕР±СЂРµ РґРѕС€Р»Рё РІ ByteBite!</h1>
-        <p style="font-size:1.5rem; margin:1.5rem 0;">РђРІС‚РµРЅС‚РёС‡РЅР° Р±СЉР»РіР°СЂСЃРєР° Рё РµРІСЂРѕРїРµР№СЃРєР° РєСѓС…РЅСЏ</p>
-        <a asp-controller="Dishes" asp-action="Index" class="btn btn-primary" style="font-size:1.4rem; padding:1.1rem 2.8rem;">Р Р°Р·РіР»РµРґР°Р№ РјРµРЅСЋС‚Рѕ</a>
+        <h1>Добре дошли в ByteBite!</h1>
+        <p style="font-size:1.5rem; margin:1.5rem 0; font-weight: 500;">Автентична българска и европейска кухня</p>
+        <a asp-area="" asp-controller="Home" asp-action="Index" asp-fragment="menu" class="btn btn-primary" style="font-size:1.3rem; padding:0.95rem 2.5rem;">Разгледай менюто</a>
     </div>
 </section>
 
-<section class="container">
-    <h2 style="text-align:center; margin:3.5rem 0 2rem;">РџРѕРїСѓР»СЏСЂРЅРё РїСЂРµРґР»РѕР¶РµРЅРёСЏ</h2>
+<section class="container menu-section" id="menu">
+    <h2 style="text-align:center; margin:3.5rem 0 2rem; font-size: 2rem; color: #2b140d;">Популярни предложения</h2>
     <div class="card-grid">
         @for (int i = 0; i < 4; i++)
         {
             <div class="card">
-                <img src="~/images/food.jpg" asp-append-version="true" alt="РҐСЂР°РЅР°">
+                <img src="~/images/food.jpg" asp-append-version="true" alt="Храна">
                 <div class="card-content">
-                    <h3>РџРёС†Р° "РњР°СЂРіР°СЂРёС‚Р°"</h3>
-                    <div class="price">15.00 Р»РІ.</div>
-                    <button class="btn-add-to-cart" style="margin-top:10px; cursor:pointer;">Р”РѕР±Р°РІРё РІ РєРѕР»РёС‡РєР°С‚Р°</button>
+                    <h3>Пица "Маргарита"</h3>
+                    <div class="price">15.00 лв.</div>
+                    <button class="btn-add-to-cart">Добави в количката</button>
                 </div>
             </div>
         }

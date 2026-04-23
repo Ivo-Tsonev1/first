@@ -1,4 +1,5 @@
 wwwroot\css\site.css
+wwwroot\css\style.css
 wwwroot\favicon.ico
 wwwroot\images\dishes\72d8acf7-4fbc-4053-9441-f49852da339c_DSC6174_1--900.jpg
 wwwroot\images\dishes\b39fa252-0a75-487a-bd34-d72091eb57ac_DSC6174_1--900.jpg
@@ -64,4 +65,3 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
-wwwroot\css\style.css
