@@ -497,9 +497,12 @@
             grid-column: 1;
         }
     }
+    .margin {
+        margin: 0 30px 0 30px;
+    }
 </style>
 
-<div class="dashboard-header">
+<div class="dashboard-header margin" style="margin-bottom: 1.5rem; margin-top: 1.5rem;">
     <div>
         <h1>👨‍💼 Staff Dashboard</h1>
         <p>Управление на @Model.Count() маси</p>
@@ -512,7 +515,7 @@
 
 <div id="messageContainer"></div>
 
-<div class="main-container">
+<div class="main-container margin">
     <div>
         <div class="panel-title">
             <span class="icon">🍽️</span>
@@ -568,7 +571,7 @@
 </div>
 
 <!-- Dishes Modal -->
-<div id="dishesModal" class="modal">
+<div id="dishesModal" class="modal margin">
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title">Избор на ястие</h2>
@@ -581,7 +584,7 @@
 </div>
 
 <!-- Bill Modal -->
-<div id="billModal" class="modal">
+<div id="billModal" class="modal margin">
     <div class="modal-content">
         <div class="modal-header">
             <h2 class="modal-title">Сметка - Маса <span id="billTableNo"></span></h2>

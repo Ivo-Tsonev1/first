@@ -3,6 +3,242 @@
     ViewData["Title"] = "За нас";
 }
 
+<style>
+    /* About Page Hero */
+    .about-hero {
+        background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1600') center/cover;
+        color: white;
+        padding: 7rem 1rem 5rem;
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+        .about-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .about-hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+    /* About Content */
+    .about-content {
+        max-width: 1000px;
+        margin: 0 auto;
+        margin-top: 1.6rem;
+    }
+
+    .intro-section {
+        background: white;
+        padding: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        margin-bottom: 4rem;
+        text-align: center;
+    }
+
+        .intro-section p {
+            font-size: 1.3rem;
+            color: #2b140d;
+            line-height: 1.8;
+            font-weight: 500;
+            margin: 0;
+        }
+
+    /* History Section */
+    .history-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: center;
+        margin-bottom: 4rem;
+    }
+
+    .history-content h2 {
+        font-size: 2.2rem;
+        color: #2b140d;
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 1rem;
+    }
+
+        .history-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: #c2410c;
+            border-radius: 2px;
+        }
+
+    .history-content p {
+        font-size: 1.1rem;
+        color: #555;
+        line-height: 1.9;
+        margin: 0;
+    }
+
+    .history-image {
+        background: linear-gradient(135deg, #f5f2ed 0%, #efe9e0 100%);
+        padding: 2rem;
+        border-radius: 12px;
+        text-align: center;
+        min-height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+    }
+
+    /* Values Grid */
+    .values-section {
+        margin-bottom: 4rem;
+    }
+
+        .values-section h2 {
+            font-size: 2.2rem;
+            color: #2b140d;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+            .values-section h2::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 4px;
+                background: #c2410c;
+                border-radius: 2px;
+            }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .value-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align: center;
+        border-top: 4px solid #c2410c;
+    }
+
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+        }
+
+        .value-card h3 {
+            font-size: 1.4rem;
+            color: #2b140d;
+            margin-bottom: 1rem;
+        }
+
+        .value-card p {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1rem;
+            margin: 0;
+        }
+
+    /* Team Section */
+    .team-section {
+        margin-top: 5rem;
+    }
+
+        .team-section h2 {
+            font-size: 2.2rem;
+            color: #2b140d;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+            .team-section h2::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 4px;
+                background: #c2410c;
+                border-radius: 2px;
+            }
+
+    @@media (max-width: 850px) {
+        .history-section
+
+    {
+        grid-template-columns: 1fr;
+    }
+
+    .about-hero {
+        padding: 5rem 1rem 3.5rem;
+    }
+
+    .intro-section {
+        padding: 2rem;
+    }
+
+    .history-content h2 {
+        font-size: 1.8rem;
+    }
+
+    .values-section h2,
+    .team-section h2 {
+        font-size: 1.8rem;
+    }
+
+    }
+
+    @@media (max-width: 600px) {
+        .about-hero
+
+    {
+        padding: 3.5rem 1rem 2.5rem;
+    }
+
+    .about-hero h1 {
+        font-size: 2rem;
+    }
+
+    .intro-section {
+        padding: 1.5rem;
+    }
+
+        .intro-section p {
+            font-size: 1.1rem;
+        }
+
+    .history-section {
+        gap: 1.5rem;
+    }
+
+    .history-content p {
+        font-size: 1rem;
+    }
+
+    }
+</style>
+
 <section class="about-hero">
     <div class="container">
         <h1>За нас</h1>
@@ -11,22 +247,64 @@
 </section>
 
 <section class="about-content">
-    <div class="container">
-        <div class="about-grid">
-            <div class="about-card">
-                <div class="card-icon">??</div>
-                <h2>История</h2>
-                <p>Нашият екип съчетава традиции и иновации, за да предлага вкусове, които се помнят. С повече от 15 години опит в кулинарната индустрия, ние сме се утвърдили като един от най-добрите ресторанти в София.</p>
+    <p style="font-size:1.25rem; max-width:720px; margin:2rem auto;">
+        Ресторант „Ресторант“ е място, където традицията среща модерността,
+        а всяко ястие разказва история.
+    </p>
+
+    <div style="margin:4rem 0;">
+        <h2>Нашата история</h2>
+        <p>
+            Основан през 2018 година от семейство с дългогодишна традиция в кулинарията,
+            ресторантът бързо се превърна в любимо място за хора, които ценят качествената
+            домашна храна, поднесена с внимание и топлота.
+        </p>
+    </div>
+
+    <div class="values-grid">
+        <div class="value-card">
+            <h3>Качество</h3>
+            <p>Работим предимно с локални и сезонни продукти от проверени производители</p>
+        </div>
+        <div class="value-card">
+            <h3>Традиция</h3>
+            <p>Съхраняваме автентичните български рецепти и ги обогатяваме със съвременен прочит</p>
+        </div>
+        <div class="value-card">
+            <h3>Уют</h3>
+            <p>Създаваме атмосфера, в която всеки гост се чувства като у дома</p>
+        </div>
+    </div>
+
+    <div style="margin:5rem 0 3rem;">
+        <h2>Нашият екип</h2>
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=300" alt="Главен готвач">
+                </div>
+                <div class="team-info">
+                    <h3>Иван Георгиев</h3>
+                    <p>Главен готвач</p>
+                </div>
             </div>
-            <div class="about-card">
-                <div class="card-icon">?????</div>
-                <h2>Нашият екип</h2>
-                <p>Шеф-готвачи с опит и любезно обслужване. Вашата усмивка е нашата цел. Всеки член на нашия екип е преданост на съвършенството и задоволството на нашите гости.</p>
+            <div class="team-member">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300" alt="Сомелиер">
+                </div>
+                <div class="team-info">
+                    <h3>Мария Костова</h3>
+                    <p>Мениджър & сомелиер</p>
+                </div>
             </div>
-            <div class="about-card">
-                <div class="card-icon">?</div>
-                <h2>Нашите ценности</h2>
-                <p>Качество, честност и страст към храната. Используем само свежи и локални съставки. Всяко ястие е приготвено с любов и внимание към детайла за максимално задоволство.</p>
+            <div class="team-member">
+                <div class="team-image">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300" alt="Собственик">
+                </div>
+                <div class="team-info">
+                    <h3>Петър Димитров</h3>
+                    <p>Собственик</p>
+                </div>
             </div>
         </div>
     </div>
