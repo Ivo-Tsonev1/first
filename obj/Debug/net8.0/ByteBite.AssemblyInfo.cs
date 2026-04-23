@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ByteBite")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4793aeaa5b89dc54bdd21e96486f1a1d8605f222")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61c1f163e871070bf23903158abf1ffca433c248")]
 [assembly: System.Reflection.AssemblyProductAttribute("ByteBite")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ByteBite")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

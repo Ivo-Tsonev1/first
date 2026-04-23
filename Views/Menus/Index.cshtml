@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<ByteBite.Models.Dish>
 
 @{
-    ViewData["Title"] = "Меню - Администратор";
+    ViewData["Title"] = "Меню";
 }
 
 <style>
@@ -30,13 +30,8 @@
         font-size: 1.2rem;
         opacity: 0.95;
         max-width: 700px;
-        margin: 0 auto 1.5rem;
+        margin: 0 auto;
         text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    .hero-action {
-        display: inline-flex;
-        gap: 1rem;
     }
 
     /* ────────────────────────────────────────── */
@@ -253,49 +248,35 @@
         color: #c2410c;
     }
 
-    .btn-add-to-cart {
-        background: linear-gradient(135deg, #c2410c 0%, #a33a0a 100%);
-        color: white;
-        border: none;
-        padding: 0.6rem 1.2rem;
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.3rem;
         border-radius: 8px;
+        border: none;
         cursor: pointer;
         font-size: 0.9rem;
         font-weight: 600;
+        text-decoration: none;
         transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #c2410c 0%, #a33a0a 100%);
+        color: white;
         box-shadow: 0 2px 8px rgba(194, 65, 12, 0.2);
     }
 
-    .btn-add-to-cart:hover {
+    .btn-primary:hover {
         background: linear-gradient(135deg, #a33a0a 0%, #8a2d08 100%);
         transform: translateY(-2px);
         box-shadow: 0 4px 16px rgba(194, 65, 12, 0.3);
     }
 
-    .btn-add-to-cart:active {
+    .btn-primary:active {
         transform: translateY(0);
         box-shadow: 0 2px 8px rgba(194, 65, 12, 0.2);
-    }
-
-    .admin-actions {
-        margin-top: 1rem;
-        padding-top: 1rem;
-        border-top: 1px dashed #ddd;
-        font-size: 0.85rem;
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .admin-actions a {
-        color: #c2410c;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.2s ease;
-    }
-
-    .admin-actions a:hover {
-        color: #a33a0a;
-        text-decoration: underline;
     }
 
     /* ────────────────────────────────────────── */
@@ -423,6 +404,11 @@
         .price {
             font-size: 1.2rem;
         }
+
+        .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+        }
     }
 
     /* ────────────────────────────────────────── */
@@ -450,80 +436,69 @@
 <main>
     <section class="menu-hero">
         <div class="container">
-            <h1>🍽️ Управление на Меню</h1>
-            <p>Администраторски панел за управление на ястия и категории</p>
-            <div class="hero-action">
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Добави ново ястие
-                </a>
-            </div>
+            <h1>🍽️ Нашето Меню</h1>
+            <p>Класически вкусове, пресни съставки и много любов във всяко ястие</p>
         </div>
     </section>
 
     <div class="container">
         <section class="menu-controls">
             <span class="control-title">📂 Филтрирай по категория</span>
-            <div class="filters">
+            <div class="filters" id="categoryFilters">
                 <button class="filter-btn active" data-category="all">✓ Всички</button>
-                <button class="filter-btn" data-category="Салати">🥗 Салати</button>
-                <button class="filter-btn" data-category="Супи">🍲 Супи</button>
-                <button class="filter-btn" data-category="Основни">🍖 Основни</button>
-                <button class="filter-btn" data-category="Десерти">🍰 Десерти</button>
-                <button class="filter-btn" data-category="Напитки">🥤 Напитки</button>
             </div>
 
             <div class="search-sort-wrapper">
                 <div class="search-container">
                     <i class="bi bi-search search-icon"></i>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Търси ястие по име...">
+                    <input type="text" class="search-input" id="dishSearch" placeholder="Търси ястие по име...">
                 </div>
                 <div class="sort-container">
                     <label for="sortSelect">Подреди по:</label>
-                    <select id="sortSelect" class="sort-select">
-                        <option value="default">По подразбиране</option>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="">По подразбиране</option>
+                        <option value="name-asc">A-Z: А-Я</option>
                         <option value="price-asc">💰 Цена: ниска → висока</option>
                         <option value="price-desc">💰 Цена: висока → ниска</option>
-                        <option value="name-asc">A-Z: А-Я</option>
-                        <option value="name-desc">Z-A: Я-А</option>
                     </select>
                 </div>
             </div>
         </section>
 
         <section class="menu-content">
-            <div class="card-grid" id="menuGrid">
-                @foreach (var item in Model)
-                {
-                    <div class="card" data-category="@item.Category?.Name" data-price="@item.Price" data-name="@item.Title.ToLower()">
-                        <img src="@(string.IsNullOrEmpty(item.ImagePath) ? "/images/default-food.jpg" : item.ImagePath)"
-                             alt="@item.Title"
-                             loading="lazy">
+            @if (!Model.Any())
+            {
+                <div class="no-results">
+                    <p>😕 Няма налични ястия в момента</p>
+                </div>
+            }
+            else
+            {
+                <div class="card-grid" id="dishesGrid">
+                    @foreach (var dish in Model)
+                    {
+                        <div class="card" data-category="@dish.Category?.Name ?? 'Other'" data-name="@dish.Title.ToLower()" data-price="@dish.Price">
+                            <img src="@(string.IsNullOrEmpty(dish.ImagePath) ? "/images/default-dish.jpg" : dish.ImagePath)" 
+                                 alt="@dish.Title" 
+                                 loading="lazy">
 
-                        <div class="card-content">
-                            <h3>@item.Title</h3>
-                            @if (!string.IsNullOrEmpty(item.Description))
-                            {
-                                <p class="description">@item.Description</p>
-                            }
-                            <div class="card-footer">
-                                <span class="price">@item.Price.ToString("F2") лв</span>
-                                <button class="btn-add-to-cart"
-                                        data-id="@item.Id"
-                                        data-title="@item.Title"
-                                        data-price="@item.Price">
-                                    🛒 Добави
-                                </button>
-                            </div>
-
-                            <div class="admin-actions">
-                                <a asp-action="Edit" asp-route-id="@item.Id">✏️ Редактирай</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">👁️ Детайли</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">🗑️ Изтрий</a>
+                            <div class="card-content">
+                                <h3>@dish.Title</h3>
+                                @if (!string.IsNullOrEmpty(dish.Description))
+                                {
+                                    <p class="description">@dish.Description</p>
+                                }
+                                <div class="card-footer">
+                                    <span class="price">@dish.Price.ToString("F2") лв</span>
+                                    <a asp-action="Details" asp-route-id="@dish.Id" class="btn btn-primary">
+                                        <i class="bi bi-eye"></i> Детали
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
 
             <div id="noResults" class="no-results hidden">
                 <p>😕 Няма намерени ястия по вашата заявка...</p>
@@ -533,16 +508,34 @@
 </main>
 
 <script>
-    // Filter functionality
-    const filterBtns = document.querySelectorAll('.filter-btn');
+    const categoryFilters = document.getElementById('categoryFilters');
+    const dishesGrid = document.getElementById('dishesGrid');
     const cards = document.querySelectorAll('.card');
-    const searchInput = document.getElementById('searchInput');
+    const searchInput = document.getElementById('dishSearch');
     const sortSelect = document.getElementById('sortSelect');
     const noResults = document.getElementById('noResults');
 
+    // Get unique categories and create filter buttons
+    const categories = new Set();
+    cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (category && category !== 'all') {
+            categories.add(category);
+        }
+    });
+
+    // Add category buttons dynamically
+    Array.from(categories).sort().forEach(category => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.setAttribute('data-category', category);
+        btn.textContent = category;
+        categoryFilters.appendChild(btn);
+    });
+
     let activeCategory = 'all';
     let searchTerm = '';
-    let sortType = 'default';
+    let sortType = '';
 
     function updateDisplay() {
         let visibleCount = 0;
@@ -566,8 +559,10 @@
     }
 
     function sortCards() {
-        const cardsArray = Array.from(cards);
-        const grid = document.getElementById('menuGrid');
+        if (!sortType) return;
+
+        const cardsArray = Array.from(cards).filter(card => card.style.display !== 'none');
+        const grid = document.getElementById('dishesGrid');
 
         cardsArray.sort((a, b) => {
             const aName = a.getAttribute('data-name');
@@ -593,9 +588,10 @@
         cardsArray.forEach(card => grid.appendChild(card));
     }
 
-    filterBtns.forEach(btn => {
+    // Event listeners
+    document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             activeCategory = btn.getAttribute('data-category');
             updateDisplay();
@@ -611,13 +607,5 @@
         sortType = e.target.value;
         sortCards();
     });
-
-    // Add to cart functionality (placeholder)
-    document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const title = btn.getAttribute('data-title');
-            const price = btn.getAttribute('data-price');
-            alert(`✅ "${title}" добавено в кошницата!\nЦена: ${price} лв`);
-        });
-    });
 </script>
+

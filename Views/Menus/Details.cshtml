@@ -1,0 +1,204 @@
+@model ByteBite.Models.Dish
+
+@{
+    ViewData["Title"] = "Детали на ястие";
+}
+
+<style>
+    .dish-details-hero {
+        background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1600') center/cover;
+        color: white;
+        padding: 6rem 1rem 4rem;
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .dish-details-hero h1 {
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        margin-bottom: 0.5rem;
+    }
+
+    .dish-details-container {
+        max-width: 900px;
+        margin: 0 auto 3rem;
+    }
+
+    .dish-details-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+
+    .dish-image-section img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    .dish-info-section h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #2c1810;
+    }
+
+    .category-badge {
+        display: inline-block;
+        background: #c2410c;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        color: #666;
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+    }
+
+    .price-section {
+        background: #f5f0ea;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .price-label {
+        font-size: 0.9rem;
+        color: #999;
+        margin-bottom: 0.5rem;
+    }
+
+    .price-value {
+        font-size: 2.2rem;
+        font-weight: bold;
+        color: #c2410c;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: #c2410c;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #a33a0a;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(194, 65, 12, 0.2);
+    }
+
+    .btn-secondary {
+        background: #e0d5c8;
+        color: #4a2f1f;
+    }
+
+    .btn-secondary:hover {
+        background: #d9c7b8;
+    }
+
+    @@media (max-width: 768px) {
+        .dish-details-hero {
+            padding: 4rem 1rem 3rem;
+        }
+
+        .dish-details-content {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+            flex: 1;
+        }
+    }
+</style>
+
+<main>
+    <section class="dish-details-hero">
+        <div class="container">
+            <h1>@Model.Title</h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="dish-details-container">
+            @if (Model == null)
+            {
+                <div class="no-results">
+                    <p>Ястието не е намерено</p>
+                </div>
+            }
+            else
+            {
+                <div class="dish-details-content">
+                    <div class="dish-image-section">
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <img src="@Model.ImagePath" alt="@Model.Title">
+                        }
+                        else
+                        {
+                            <img src="/images/default-dish.jpg" alt="@Model.Title">
+                        }
+                    </div>
+
+                    <div class="dish-info-section">
+                        <h2>@Model.Title</h2>
+                        
+                        @if (Model.Category != null)
+                        {
+                            <span class="category-badge">@Model.Category.Name</span>
+                        }
+
+                        @if (!string.IsNullOrEmpty(Model.Description))
+                        {
+                            <p class="description">@Model.Description</p>
+                        }
+
+                        <div class="price-section">
+                            <div class="price-label">Цена</div>
+                            <div class="price-value">@Model.Price.ToString("F2") лв</div>
+                        </div>
+
+                        <div class="actions">
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Назад към меню
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</main>
