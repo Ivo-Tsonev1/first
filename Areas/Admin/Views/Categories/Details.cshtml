@@ -1,30 +1,243 @@
 ﻿@model ByteBite.Models.Category
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детали на категория";
 }
 
-<h1>Details</h1>
+<style>
+    .details-hero {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color: white;
+        padding: 4rem 1rem 3rem;
+        margin-bottom: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(79, 172, 254, 0.3);
+    }
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Menu)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Menu.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    .details-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    .details-hero p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        margin: 0;
+    }
+
+    .details-container {
+        max-width: 800px;
+        margin: 0 auto 3rem;
+    }
+
+    .details-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color: white;
+        padding: 1.5rem 2rem;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .info-item {
+        margin-bottom: 2rem;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .info-value {
+        font-size: 1.3rem;
+        color: #2c3e50;
+        font-weight: 600;
+        padding: 1rem;
+        background: #f0f9ff;
+        border-radius: 8px;
+    }
+
+    .icon {
+        margin-right: 0.5rem;
+    }
+
+    .menu-link {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background: #e0f7ff;
+        color: #00a8cc;
+        border-radius: 50px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .menu-link:hover {
+        background: #b3ecff;
+        transform: translateY(-2px);
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.9rem 1.8rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(79, 172, 254, 0.3);
+    }
+
+    .btn-secondary {
+        background: #e0f7ff;
+        color: #00a8cc;
+    }
+
+    .btn-secondary:hover {
+        background: #b3ecff;
+        transform: translateY(-2px);
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid #f0f9ff;
+    }
+
+    .stat-item {
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #00a8cc;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 0.3rem;
+    }
+
+    @@media (max-width: 768px) {
+        .details-hero {
+            padding: 2rem 1rem;
+        }
+
+        .details-hero h1 {
+            font-size: 1.8rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+            flex: 1;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="details-hero">
+        <h1><i class="bi bi-collection"></i> @Model.Name</h1>
+        <p>Детайли на категория</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card">
+            <div class="card-header">
+                <i class="bi bi-info-circle"></i> Основна информация
+            </div>
+            <div class="card-body">
+                <div class="info-item">
+                    <span class="info-label"><span class="icon">📂</span>Име на категория</span>
+                    <div class="info-value">@Model.Name</div>
+                </div>
+
+                <div class="info-item">
+                    <span class="info-label"><span class="icon">🆔</span>ID</span>
+                    <div class="info-value">#@Model.Id</div>
+                </div>
+
+                @if (Model.Menu != null)
+                {
+                    <div class="info-item">
+                        <span class="info-label"><span class="icon">📋</span>Меню</span>
+                        <div class="info-value">
+                            <a asp-area="Admin" asp-controller="Menus" asp-action="Details" asp-route-id="@Model.Menu.Id" class="menu-link">
+                                <i class="bi bi-arrow-right"></i> @Model.Menu.Name
+                            </a>
+                        </div>
+                    </div>
+                }
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">@(Model.Dishes?.Count ?? 0)</div>
+                        <div class="stat-label">Ястия в категория</div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                        <i class="bi bi-pencil"></i> Редактирай
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Назад към списък
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

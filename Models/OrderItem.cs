@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ByteBite.Models
 {
@@ -13,5 +14,8 @@ namespace ByteBite.Models
         public virtual Dish Dish { get; set; }
 
         public int Quantity { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
     }
 }

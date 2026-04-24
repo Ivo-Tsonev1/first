@@ -1,48 +1,289 @@
 ﻿@model ByteBite.Models.Dish
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детали на ястие";
 }
 
-<h1>Details</h1>
+<style>
+    .details-hero {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color:  #2c3e50;
+        padding: 4rem 1rem 3rem;
+        margin-bottom: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(250, 112, 154, 0.3);
+    }
 
-<div>
-    <h4>Dish</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    .details-hero h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;   
+    }
+
+    .details-hero p {
+        font-size: 1.1rem;
+        opacity: 0.95;
+        margin: 0;
+    }
+
+    .details-container {
+        max-width: 1000px;
+        margin: 0 auto 3rem;
+    }
+
+    .details-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .details-image {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        padding: 1rem;
+    }
+
+    .details-image img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .details-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color: #2c3e50;
+        padding: 1.5rem 2rem;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        font-size: 1.2rem;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .price-section {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        padding: 2rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+    .price-label {
+        font-size: 0.9rem;
+        color: #2c3e50;
+        opacity: 0.8;
+        margin-bottom: 0.5rem;
+    }
+
+    .price-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+
+    .description-section {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+        color: #555;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.9rem 1.8rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        color: #2c3e50;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
+    }
+
+    .btn-secondary {
+        background: #e8f0f5;
+        color: #2c3e50;
+    }
+
+    .btn-secondary:hover {
+        background: #dce5ec;
+        transform: translateY(-2px);
+    }
+
+    .category-badge {
+        display: inline-block;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    @@media (max-width: 1024px) {
+        .details-content {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .details-hero {
+            padding: 2rem 1rem;
+        }
+
+        .details-hero h1 {
+            font-size: 1.8rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+            flex: 1;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="details-hero">
+        <h1><i class="bi bi-egg-fried"></i> @Model.Title</h1>
+        <p>Детайли на ястието</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-content">
+            <div class="details-image">
+                @if (!string.IsNullOrEmpty(Model.ImagePath))
+                {
+                    <img src="@Model.ImagePath" alt="@Model.Title">
+                }
+                else
+                {
+                    <img src="/images/default-dish.jpg" alt="@Model.Title">
+                }
+            </div>
+
+            <div class="details-card">
+                <div class="card-header">
+                    <i class="bi bi-info-circle"></i> Информация
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label"><i class="bi bi-collection"></i> Категория</div>
+                            <div class="info-value">
+                                @if (Model.Category != null)
+                                {
+                                    <span class="category-badge">@Model.Category.Name</span>
+                                }
+                                else
+                                {
+                                    <span>N/A</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="info-item">
+                            <div class="info-label"><i class="bi bi-hash"></i> ID</div>
+                            <div class="info-value">#@Model.Id</div>
+                        </div>
+                    </div>
+
+                    <div class="price-section">
+                        <div class="price-label">Цена</div>
+                        <div class="price-value">@Model.Price.ToString("F2") лв</div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <div>
+                            <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">Описание</h4>
+                            <div class="description-section">
+                                @Model.Description
+                            </div>
+                        </div>
+                    }
+
+                    <div class="actions">
+                        <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                            <i class="bi bi-pencil"></i> Редактирай
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Назад към списък
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -11,5 +11,7 @@ namespace ByteBite.Models
 
         public int MenuId { get; set; }
         public virtual Menu Menu { get; set; }
+
+        public virtual ICollection<Dish> Dishes { get; set; } = new List<Dish>();
     }
 }

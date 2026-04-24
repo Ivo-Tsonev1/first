@@ -2147,4 +2147,9 @@ select {
         padding: 0.4rem 0.8rem;
         font-size: 0.75rem;
     }
+    :root {
+        /* Use the exact orange from your successful cards */
+        --accent-orange: #d35400;
+        --dark-accent: #a33a0a;
+    }
 }

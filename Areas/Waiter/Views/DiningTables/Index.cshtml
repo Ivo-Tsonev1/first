@@ -529,7 +529,7 @@
                 <div class="table-card" 
                      onclick="selectTable(this, @table.Id, @table.TableNumber)" 
                      id="table-@table.Id">
-                    <div class="table-status @(table.IsOccupied ? "occupied" : "free")"></div>
+                    <div class="table-status @(table.IsOccupied ? "occupied" : "free")"></div>  
                     <div class="table-number">@table.TableNumber</div>
                     <div class="table-capacity">@table.Capacity мест@(table.Capacity == 1 ? "" : "а")</div>
                 </div>
