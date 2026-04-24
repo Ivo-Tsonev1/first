@@ -1,51 +1,241 @@
 ﻿@model ByteBite.Models.Order
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Изтриване на поръчка";
 }
 
-<h1>Delete</h1>
+<style>
+    /* Запазваме основната топла палитра и добавяме акценти за "Внимание/Изтриване" */
+    :root {
+        --warm-orange: #e67e22;
+        --warm-orange-dark: #d35400;
+        --rich-brown: #5c3a21;
+        --light-tan: #fdf6f0;
+        --hover-tan: #f5e3d7;
+        --text-dark-brown: #3e2723;
+        --text-muted-brown: #8c6b53;
+        /* Цветове за изтриване/опасност */
+        --danger-red: #e74c3c;
+        --danger-dark: #c0392b;
+        --soft-red-bg: #fbe9e7;
+    }
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Order</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OrderTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OrderTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsPaid)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsPaid)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TotalPrice)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TotalPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DiningTable)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DiningTable.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Waiter)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Waiter.Id)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    .details-hero {
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: #fffdfa;
+        padding: 3rem 1rem 2rem;
+        margin-bottom: 3rem;
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(92, 58, 33, 0.25);
+        text-align: center;
+    }
+
+        .details-hero h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .details-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+        }
+
+    .details-container {
+        max-width: 900px;
+        margin: 0 auto 3rem;
+    }
+
+    .details-card {
+        background: #fffdfa;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(92, 58, 33, 0.08);
+        overflow: hidden;
+    }
+
+    .warning-alert {
+        background: var(--soft-red-bg);
+        color: var(--danger-dark);
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        border-bottom: 1px solid rgba(198, 40, 40, 0.1);
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+        .warning-alert i {
+            font-size: 1.5rem;
+            color: var(--danger-red);
+        }
+
+    .card-body {
+        padding: 2.5rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .info-item {
+        background: var(--light-tan);
+        padding: 1.2rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--warm-orange);
+    }
+
+    .info-label {
+        font-size: 0.85rem;
+        color: var(--text-muted-brown);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-value {
+        font-size: 1.2rem;
+        color: var(--text-dark-brown);
+        font-weight: 600;
+    }
+
+    .actions-form {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 2px solid var(--light-tan);
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 0.9rem 1.8rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .btn-danger {
+        background-image: linear-gradient(135deg, var(--danger-red) 0%, var(--danger-dark) 100%);
+        color: white;
+    }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3);
+            color: white;
+        }
+
+    .btn-secondary {
+        background: var(--hover-tan);
+        color: var(--rich-brown);
+    }
+
+        .btn-secondary:hover {
+            background: #ebd2c1;
+            transform: translateY(-2px);
+            color: var(--rich-brown);
+        }
+
+    @@media (max-width: 768px) {
+        .details-hero {
+            padding: 2rem 1rem;
+        }
+
+        .card-body {
+            padding: 1.5rem;
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .actions-form {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="details-hero">
+        <h1><i class="bi bi-trash3"></i> Изтриване на поръчка</h1>
+        <p>Моля, прегледайте детайлите преди да потвърдите</p>
+    </div>
+
+    <div class="details-container">
+        <div class="details-card">
+            <div class="warning-alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <div>
+                    <strong>Сигурни ли сте?</strong>
+                    <div style="font-size: 0.95rem; opacity: 0.9; margin-top: 0.2rem; font-weight: normal;">
+                        Това действие е необратимо и поръчката ще бъде изтрита от системата.
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <h4 style="color: var(--rich-brown); margin-bottom: 1.5rem; font-weight: 700;">Детайли на поръчка #@Model.Id</h4>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-clock"></i> Време на поръчка</div>
+                        <div class="info-value">@Html.DisplayFor(model => model.OrderTime)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-credit-card"></i> Статус на плащане</div>
+                        <div class="info-value">
+                            @(Model.IsPaid ? "Платена" : "Неплатена")
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-cash"></i> Обща сума</div>
+                        <div class="info-value">@Html.DisplayFor(model => model.TotalPrice) лв</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-table"></i> Маса</div>
+                        <div class="info-value">Маса @Html.DisplayFor(model => model.DiningTable.Id)</div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-label"><i class="bi bi-person"></i> Сервитьор (ID)</div>
+                        <div class="info-value">@Html.DisplayFor(model => model.Waiter.Id)</div>
+                    </div>
+                </div>
+
+                <form asp-action="Delete" class="actions-form">
+                    <input type="hidden" asp-for="Id" />
+
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Потвърди изтриването
+                    </button>
+
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Отказ
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

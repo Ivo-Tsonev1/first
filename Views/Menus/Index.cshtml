@@ -476,7 +476,7 @@
                 <div class="card-grid" id="dishesGrid">
                     @foreach (var dish in Model)
                     {
-                        <div class="card" data-category="@dish.Category?.Name ?? 'Other'" data-name="@dish.Title.ToLower()" data-price="@dish.Price">
+                        <div class="card" data-category="@(dish.Category?.Name ?? "Other")" data-name="@dish.Title.ToLower()" data-price="@dish.Price">
                             <img src="@(string.IsNullOrEmpty(dish.ImagePath) ? "/images/default-dish.jpg" : dish.ImagePath)" 
                                  alt="@dish.Title" 
                                  loading="lazy">
@@ -488,7 +488,7 @@
                                     <p class="description">@dish.Description</p>
                                 }
                                 <div class="card-footer">
-                                    <span class="price">@dish.Price.ToString("F2") лв</span>
+                                    <span class="price">@dish.Price.ToString("F2") €</span>
                                     <a asp-action="Details" asp-route-id="@dish.Id" class="btn btn-primary">
                                         <i class="bi bi-eye"></i> Детали
                                     </a>

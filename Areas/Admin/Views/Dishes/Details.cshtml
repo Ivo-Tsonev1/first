@@ -1,30 +1,42 @@
 ﻿@model ByteBite.Models.Dish
 
 @{
-    ViewData["Title"] = "Детали на ястие";
+    ViewData["Title"] = "Детайли на ястие";
 }
 
 <style>
+    /* Същите топли цветове за консистентност */
+    :root {
+        --warm-orange: #e67e22;
+        --warm-orange-dark: #d35400;
+        --rich-brown: #5c3a21;
+        --light-tan: #fdf6f0;
+        --hover-tan: #f5e3d7;
+        --text-dark-brown: #3e2723;
+        --text-muted-brown: #8c6b53;
+    }
+
     .details-hero {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color:  #2c3e50;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: #fffdfa;
         padding: 4rem 1rem 3rem;
         margin-bottom: 3rem;
         border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(250, 112, 154, 0.3);
+        box-shadow: 0 8px 32px rgba(92, 58, 33, 0.25);
     }
 
-    .details-hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;   
-    }
+        .details-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
 
-    .details-hero p {
-        font-size: 1.1rem;
-        opacity: 0.95;
-        margin: 0;
-    }
+        .details-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+        }
 
     .details-container {
         max-width: 1000px;
@@ -39,30 +51,30 @@
     }
 
     .details-image {
-        background: white;
+        background: #fffdfa;
         border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(92, 58, 33, 0.08);
         padding: 1rem;
     }
 
-    .details-image img {
-        width: 100%;
-        height: auto;
-        object-fit: cover;
-        border-radius: 8px;
-    }
+        .details-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
     .details-card {
-        background: white;
+        background: #fffdfa;
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(92, 58, 33, 0.08);
         overflow: hidden;
     }
 
     .card-header {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color: #2c3e50;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: white;
         padding: 1.5rem 2rem;
         font-size: 1.3rem;
         font-weight: 600;
@@ -80,14 +92,15 @@
     }
 
     .info-item {
-        background: #f8f9fa;
+        background: var(--light-tan);
         padding: 1.5rem;
         border-radius: 8px;
+        border-left: 4px solid var(--warm-orange);
     }
 
     .info-label {
         font-size: 0.85rem;
-        color: #666;
+        color: var(--text-muted-brown);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 600;
@@ -96,38 +109,41 @@
 
     .info-value {
         font-size: 1.2rem;
-        color: #2c3e50;
+        color: var(--text-dark-brown);
         font-weight: 600;
     }
 
     .price-section {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
         padding: 2rem;
         border-radius: 8px;
         text-align: center;
         margin: 2rem 0;
+        box-shadow: 0 4px 15px rgba(92, 58, 33, 0.15);
     }
 
     .price-label {
         font-size: 0.9rem;
-        color: #2c3e50;
-        opacity: 0.8;
+        color: rgba(255, 255, 255, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 1px;
         margin-bottom: 0.5rem;
     }
 
     .price-value {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #2c3e50;
+        color: #fffdfa;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
     }
 
     .description-section {
-        background: #f8f9fa;
+        background: var(--light-tan);
         padding: 1.5rem;
         border-radius: 8px;
         margin-bottom: 1.5rem;
         line-height: 1.6;
-        color: #555;
+        color: var(--text-dark-brown);
     }
 
     .actions {
@@ -152,32 +168,36 @@
     }
 
     .btn-primary {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color: #2c3e50;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-orange-dark) 100%);
+        color: white;
     }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(250, 112, 154, 0.3);
-    }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 84, 0, 0.3);
+            color: white;
+        }
 
     .btn-secondary {
-        background: #e8f0f5;
-        color: #2c3e50;
+        background: var(--hover-tan);
+        color: var(--rich-brown);
     }
 
-    .btn-secondary:hover {
-        background: #dce5ec;
-        transform: translateY(-2px);
-    }
+        .btn-secondary:hover {
+            background: #ebd2c1;
+            transform: translateY(-2px);
+            color: var(--rich-brown);
+        }
 
     .category-badge {
         display: inline-block;
+        background-color: var(--warm-orange-dark);
         color: white;
         padding: 0.4rem 1rem;
         border-radius: 50px;
         font-size: 0.85rem;
         font-weight: 600;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
     @@media (max-width: 1024px) {
@@ -191,9 +211,9 @@
             padding: 2rem 1rem;
         }
 
-        .details-hero h1 {
-            font-size: 1.8rem;
-        }
+            .details-hero h1 {
+                font-size: 1.8rem;
+            }
 
         .card-body {
             padding: 1.5rem;
@@ -267,7 +287,7 @@
                     @if (!string.IsNullOrEmpty(Model.Description))
                     {
                         <div>
-                            <h4 style="color: #2c3e50; margin-bottom: 0.5rem;">Описание</h4>
+                            <h4 style="color: var(--rich-brown); margin-bottom: 0.5rem; font-weight: 600;">Описание</h4>
                             <div class="description-section">
                                 @Model.Description
                             </div>

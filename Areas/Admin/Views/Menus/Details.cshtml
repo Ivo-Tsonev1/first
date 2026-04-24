@@ -1,30 +1,42 @@
 ﻿@model ByteBite.Models.Menu
 
 @{
-    ViewData["Title"] = "Детали на меню";
+    ViewData["Title"] = "Детайли на меню";
 }
 
 <style>
+    /* Запазваме същите топли цветове за консистентност */
+    :root {
+        --warm-orange: #e67e22;
+        --warm-orange-dark: #d35400;
+        --rich-brown: #5c3a21;
+        --light-tan: #fdf6f0;
+        --hover-tan: #f5e3d7;
+        --text-dark-brown: #3e2723;
+        --text-muted-brown: #8c6b53;
+    }
+
     .details-hero {
-background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color: white;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: #fffdfa;
         padding: 4rem 1rem 3rem;
         margin-bottom: 3rem;
         border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(245, 87, 108, 0.3);
+        box-shadow: 0 8px 32px rgba(92, 58, 33, 0.25);
     }
 
-    .details-hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-    }
+        .details-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
 
-    .details-hero p {
-        font-size: 1.1rem;
-        opacity: 0.95;
-        margin: 0;
-    }
+        .details-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+        }
 
     .details-container {
         max-width: 800px;
@@ -32,14 +44,14 @@ background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-ac
     }
 
     .details-card {
-        background: white;
+        background: #fffdfa;
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(92, 58, 33, 0.08);
         overflow: hidden;
     }
 
     .card-header {
-background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
         color: white;
         padding: 1.5rem 2rem;
         font-size: 1.3rem;
@@ -56,7 +68,7 @@ background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-ac
 
     .info-label {
         font-size: 0.85rem;
-        color: #666;
+        color: var(--text-muted-brown);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 600;
@@ -66,11 +78,12 @@ background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-ac
 
     .info-value {
         font-size: 1.5rem;
-        color: #2c3e50;
+        color: var(--text-dark-brown);
         font-weight: 600;
-        padding: 1rem;
-        background: #f8f9fa;
+        padding: 1rem 1.2rem;
+        background: var(--light-tan);
         border-radius: 8px;
+        border-left: 4px solid var(--warm-orange);
     }
 
     .icon {
@@ -99,33 +112,35 @@ background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-ac
     }
 
     .btn-primary {
-background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-orange-dark) 100%);
         color: white;
     }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(245, 87, 108, 0.3);
-    }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 84, 0, 0.3);
+            color: white;
+        }
 
     .btn-secondary {
-        background: #ffe5ec;
-        color: #f5576c;
+        background: var(--hover-tan);
+        color: var(--rich-brown);
     }
 
-    .btn-secondary:hover {
-        background: #ffd0dc;
-        transform: translateY(-2px);
-    }
+        .btn-secondary:hover {
+            background: #ebd2c1;
+            transform: translateY(-2px);
+            color: var(--rich-brown);
+        }
 
     @@media (max-width: 768px) {
         .details-hero {
             padding: 2rem 1rem;
         }
 
-        .details-hero h1 {
-            font-size: 1.8rem;
-        }
+            .details-hero h1 {
+                font-size: 1.8rem;
+            }
 
         .card-body {
             padding: 1.5rem;

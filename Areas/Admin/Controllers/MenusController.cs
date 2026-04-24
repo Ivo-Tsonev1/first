@@ -25,7 +25,13 @@ namespace ByteBite.Areas.Admin.Controllers
         // GET: Menus
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Menus.ToListAsync());
+            // Взимаме всички ястия и включваме техните категории (за да работят филтрите)
+            var dishes = await _context.Dishes
+                .Include(d => d.Category)
+                .ToListAsync();
+
+            // Подаваме списъка с ястия (List<Dish>) към изгледа
+            return View(dishes);
         }
 
         // GET: Menus/Details/5

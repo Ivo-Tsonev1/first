@@ -650,11 +650,11 @@
                                 <div class="order-item-name">${item.dishName}</div>
                                 <div class="order-item-qty">x${item.quantity}</div>
                             </div>
-                            <div class="order-item-price">${item.subtotal.toFixed(2)} лв.</div>
+                            <div class="order-item-price">${item.subtotal.toFixed(2)} €.</div>
                             <button class="remove-btn" onclick="removeItem(${item.itemId}, ${tableId})">✕</button>
                         </div>`;
                     });
-                    html += `<div class="order-total"><span>Общо:</span><span>${data.total.toFixed(2)} лв.</span></div>`;
+                    html += `<div class="order-total"><span>Общо:</span><span>${data.total.toFixed(2)} €.</span></div>`;
                     list.innerHTML = html;
                     document.getElementById('billBtn').disabled = false;
                     document.getElementById('releaseBtn').disabled = false;
@@ -688,7 +688,7 @@
                         <div class="dish-info">
                             <div class="dish-name">${d.title}</div>
                             <div class="dish-desc">${d.description || 'Предложение'}</div>
-                            <div class="dish-price">${d.price.toFixed(2)} лв.</div>
+                            <div class="dish-price">${d.price.toFixed(2)} €.</div>
                             <div class="qty-control">
                                 <button class="qty-btn" onclick="updateQty(${d.id}, -1)">−</button>
                                 <input type="text" id="qty-${d.id}" class="qty-input" value="1" readonly>
@@ -773,10 +773,10 @@
                             <div style="font-weight: 600; color: var(--primary-brown);">${i.dishName}</div>
                             <div style="color: #666; font-size: 0.9rem;">x${i.quantity}</div>
                         </div>
-                        <div style="font-weight: 600; color: var(--accent-orange);">${i.subtotal.toFixed(2)} лв.</div>
+                        <div style="font-weight: 600; color: var(--accent-orange);">${i.subtotal.toFixed(2)} €.</div>
                     </div>`;
                 });
-                html += `<div class="bill-total"><span>ОБЩО:</span><span>${data.total.toFixed(2)} лв.</span></div>`;
+                html += `<div class="bill-total"><span>ОБЩО:</span><span>${data.total.toFixed(2)} €.</span></div>`;
                 html += `<div class="bill-actions">
                     <button class="btn btn-success" onclick="payment(${data.orderId}, ${data.tableId})"><span class="icon">💳</span> Плащане</button>
                     <button class="btn btn-danger" onclick="closeBillModal()"><span class="icon">✕</span> Отказ</button>

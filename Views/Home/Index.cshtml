@@ -14,15 +14,26 @@
 <section class="container menu-section" id="menu">
     <h2 style="text-align:center; margin:3.5rem 0 2rem; font-size: 2rem; color: #2b140d;">Популярни предложения</h2>
     <div class="card-grid">
-        @for (int i = 0; i < 4; i++)
-        {
             <div class="card">
-                <img src="~/images/food.jpg" asp-append-version="true" alt="Храна">
+                <img src="~/images/dishes/5bceb9c6-25f8-4cc0-9950-cad071442724_54160338775_3fae945ea4_k-1365x910.jpg" asp-append-version="true" alt="Храна">
                 <div class="card-content">
-                    <h3>Пица "Маргарита"</h3>
-                    <div class="price">15.00 лв.</div>
+                <h3>Крем Карамел</h3>
+                <div class="price">8 €</div>
                 </div>
             </div>
-        }
+        <div class="card">
+            <img src="~/images/dishes/6ad4a0a5-7fde-45e1-a43a-3edea2f1c7fe_domashna-musaka-s-kaima-i-kartofi-puhkava-zalivka.webp" asp-append-version="true" alt="Храна">
+            <div class="card-content">
+                <h3>Мусака</h3>
+                <div class="price">11 €</div>
+            </div>
+        </div>
+        <div class="card">
+            <img src="~/images/dishes/9e42608c-f82b-4c63-8c76-122b28b0a4e5_shopska-salata_thumb-blog_post.jpg" asp-append-version="true" alt="Храна">
+            <div class="card-content">
+                <h3>Шопска салата</h3>
+                <div class="price">7 €</div>
+            </div>
+        </div>
     </div>
 </section>

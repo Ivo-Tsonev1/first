@@ -225,112 +225,77 @@
         }
 
     @@media (max-width: 850px) {
-        .cart-wrapper
+        .cart-wrapper {
+            margin-left: auto;
+        }
 
-    {
-        margin-left: auto;
-    }
+        .menu-hero {
+            padding: 5rem 1rem 3.5rem;
+        }
 
-    .menu-hero {
-        padding: 5rem 1rem 3.5rem;
-    }
+        .menu-controls {
+            padding: 2rem 1rem;
+        }
 
-    .menu-controls {
-        padding: 2rem 1rem;
-    }
+        .filters {
+            gap: 0.7rem;
+        }
 
-    .filters {
-        gap: 0.7rem;
-    }
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
 
-    .filter-btn {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.9rem;
-    }
-
-    .search-sort-container {
-        gap: 0.8rem;
-    }
-
+        .search-sort-container {
+            gap: 0.8rem;
+        }
     }
 
     @@media (max-width: 600px) {
-        .menu-hero
+        .menu-hero {
+            padding: 3.5rem 1rem 2.5rem;
+        }
 
-    {
-        padding: 3.5rem 1rem 2.5rem;
-    }
+            .menu-hero h1 {
+                font-size: 2rem;
+            }
 
-    .menu-hero h1 {
-        font-size: 2rem;
-    }
+            .menu-hero p {
+                font-size: 1.05rem;
+            }
 
-    .menu-hero p {
-        font-size: 1.05rem;
-    }
+        .filters {
+            gap: 0.6rem;
+        }
 
-    .filters {
-        gap: 0.6rem;
-    }
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
 
-    .filter-btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.85rem;
-    }
+        .search-sort-container {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
 
-    .search-sort-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
-    }
-
-    .sort-container {
-        justify-content: center;
-    }
-
+        .sort-container {
+            justify-content: center;
+        }
     }
 </style>
- 
+
 <main>
     <section class="menu-hero">
         <div class="container">
             <h1>Нашето Меню</h1>
             <p>Класически вкусове, пресни съставки и много любов във всяко ястие</p>
             @* Бутон за администратори (опционално) *@
-            <a asp-action="Create" class="btn btn-sm btn-outline-secondary" style="margin-top: 1rem;">+ Добави ново ястие</a>
+            <a asp-action="Create" style="margin-top: 1.5rem; display: inline-block; background-color: #c2410c; color: white; padding: 0.8rem 2rem; border-radius: 50px; font-weight: bold; text-decoration: none; font-size: 1.1rem; box-shadow: 0 4px 15px rgba(194, 65, 12, 0.5);">+ Добави ново ястие</a>
         </div>
     </section>
 
     <div class="container">
-        <section class="menu-controls">
-            <div class="filters">
-                <button class="filter-btn active" data-category="all">Всички</button>
-                <button class="filter-btn" data-category="Салати">Салати</button>
-                <button class="filter-btn" data-category="Супи">Супи</button>
-                <button class="filter-btn" data-category="Основни">Основни</button>
-                <button class="filter-btn" data-category="Десерти">Десерти</button>
-                <button class="filter-btn" data-category="Напитки">Напитки</button>
-            </div>
-
-            <div class="search-sort-container">
-                <div class="search-container">
-                    <span class="search-icon">🔍</span>
-                    <input type="text" class="search-input" id="searchInput" placeholder="Търси ястие...">
-                </div>
-
-                <div class="sort-container">
-                    <label for="sortSelect" style="font-weight: 600; color: #4a2f1f; margin-right: 0.5rem;">Подреди по:</label>
-                    <select id="sortSelect" class="sort-select">
-                        <option value="default">По подразбиране</option>
-                        <option value="price-asc">Цена: ниска към висока</option>
-                        <option value="price-desc">Цена: висока към ниска</option>
-                        <option value="name-asc">Име: А-Я</option>
-                        <option value="name-desc">Име: Я-А</option>
-                    </select>
-                </div>
-            </div>
-        </section>
-
         <section class="menu-content">
             <div class="card-grid" id="menuGrid">
                 @foreach (var item in Model)
@@ -346,20 +311,22 @@
                             <p class="description">@item.Description</p>
                             <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
                                 <span class="price" style="font-weight: bold; color: #e67e22; font-size: 1.2rem;">
-                                    @item.Price.ToString("F2") лв.
+                                    @item.Price.ToString("F2") €
                                 </span>
-                                <button class="btn-add-to-cart"
-                                        data-id="@item.Id"
-                                        data-title="@item.Title"
-                                        data-price="@item.Price">
-                                    🛒 Добави
-                                </button>
                             </div>
 
-                            @* Линк за редакция (вижда се само ако е нужно) *@
-                            <div class="admin-actions" style="margin-top: 10px; font-size: 0.8rem; border-top: 1px dashed #ccc; pt-2;">
-                                <a asp-action="Edit" asp-route-id="@item.Id">Редактирай</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Детайли</a>
+                            <div class="admin-actions" style="margin-top: 10px; font-size: 0.8rem; border-top: 1px dashed #ccc; padding-top: 8px; display: flex; gap: 8px; flex-wrap: wrap;">
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="text-primary text-decoration-none">
+                                    <i class="bi bi-pencil-square"></i> Редактирай
+                                </a>
+                                <span class="text-muted">|</span>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="text-info text-decoration-none">
+                                    <i class="bi bi-info-circle"></i> Детайли
+                                </a>
+                                <span class="text-muted">|</span>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="text-danger text-decoration-none">
+                                    <i class="bi bi-trash"></i> Изтрий
+                                </a>
                             </div>
                         </div>
                     </div>

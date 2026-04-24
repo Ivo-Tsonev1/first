@@ -1,30 +1,47 @@
 ﻿@model ByteBite.Models.Order
 
 @{
-    ViewData["Title"] = "Детали на поръчка";
+    ViewData["Title"] = "Детайли на поръчка";
 }
 
 <style>
+    /* Нашата установена топла палитра */
+    :root {
+        --warm-orange: #e67e22;
+        --warm-orange-dark: #d35400;
+        --rich-brown: #5c3a21;
+        --light-tan: #fdf6f0;
+        --hover-tan: #f5e3d7;
+        --text-dark-brown: #3e2723;
+        --text-muted-brown: #8c6b53;
+        /* Меки семантични цветове за статусите */
+        --soft-green-bg: #e8f5e9;
+        --soft-green-text: #2e7d32;
+        --soft-red-bg: #fbe9e7;
+        --soft-red-text: #c62828;
+    }
+
     .details-hero {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color: white;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: #fffdfa;
         padding: 4rem 1rem 3rem;
         margin-bottom: 3rem;
         border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 8px 32px rgba(92, 58, 33, 0.25);
     }
 
-    .details-hero h1 {
-        font-size: 2.5rem;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-    }
+        .details-hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
 
-    .details-hero p {
-        font-size: 1.1rem;
-        opacity: 0.95;
-        margin: 0;
-    }
+        .details-hero p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin: 0;
+        }
 
     .details-container {
         max-width: 1000px;
@@ -32,14 +49,14 @@
     }
 
     .details-card {
-        background: white;
+        background: #fffdfa;
         border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 4px 20px rgba(92, 58, 33, 0.08);
         overflow: hidden;
     }
 
     .card-header {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
         color: white;
         padding: 1.5rem 2rem;
         font-size: 1.3rem;
@@ -58,14 +75,15 @@
     }
 
     .info-item {
-        background: #f8f9fa;
+        background: var(--light-tan);
         padding: 1.5rem;
         border-radius: 8px;
+        border-left: 4px solid var(--warm-orange);
     }
 
     .info-label {
         font-size: 0.85rem;
-        color: #666;
+        color: var(--text-muted-brown);
         text-transform: uppercase;
         letter-spacing: 0.5px;
         font-weight: 600;
@@ -74,7 +92,7 @@
 
     .info-value {
         font-size: 1.3rem;
-        color: #2c3e50;
+        color: var(--text-dark-brown);
         font-weight: 600;
     }
 
@@ -86,37 +104,44 @@
         font-weight: 600;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     }
 
     .status-paid {
-        background: #d4edda;
-        color: #155724;
+        background: var(--soft-green-bg);
+        color: var(--soft-green-text);
+        border: 1px solid rgba(46, 125, 50, 0.2);
     }
 
     .status-unpaid {
-        background: #f8d7da;
-        color: #721c24;
+        background: var(--soft-red-bg);
+        color: var(--soft-red-text);
+        border: 1px solid rgba(198, 40, 40, 0.2);
     }
 
     .price-highlight {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
-        color: white;
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--rich-brown) 100%);
+        color: #fffdfa;
         padding: 2rem;
         border-radius: 8px;
         text-align: center;
         margin: 2rem 0;
+        box-shadow: 0 4px 15px rgba(92, 58, 33, 0.15);
     }
 
-    .price-highlight .price-label {
-        font-size: 0.95rem;
-        opacity: 0.9;
-        margin-bottom: 0.5rem;
-    }
+        .price-highlight .price-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-    .price-highlight .price-value {
-        font-size: 2.5rem;
-        font-weight: 700;
-    }
+        .price-highlight .price-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
 
     .actions {
         display: flex;
@@ -140,36 +165,39 @@
     }
 
     .btn-primary {
-        background-image: linear-gradient(135deg, var(--accent-orange) 0%, var(--dark-accent) 100%);
+        background-image: linear-gradient(135deg, var(--warm-orange) 0%, var(--warm-orange-dark) 100%);
         color: white;
     }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
-    }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 84, 0, 0.3);
+            color: white;
+        }
 
     .btn-secondary {
-        background: #e8eaf6;
-        color: #667eea;
+        background: var(--hover-tan);
+        color: var(--rich-brown);
     }
 
-    .btn-secondary:hover {
-        background: #dde3f0;
-        transform: translateY(-2px);
-    }
+        .btn-secondary:hover {
+            background: #ebd2c1;
+            transform: translateY(-2px);
+            color: var(--rich-brown);
+        }
 
     .items-section {
         margin-top: 2rem;
         padding-top: 2rem;
-        border-top: 2px solid #e8eaf6;
+        border-top: 2px solid var(--light-tan);
     }
 
-    .items-section h3 {
-        color: #2c3e50;
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
-    }
+        .items-section h3 {
+            color: var(--rich-brown);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
 
     .item-list {
         list-style: none;
@@ -177,24 +205,33 @@
         margin: 0;
     }
 
-    .item-list li {
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 6px;
-        margin-bottom: 0.8rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        .item-list li {
+            padding: 1.2rem;
+            background: var(--light-tan);
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+            .item-list li:hover {
+                background: var(--hover-tan);
+                border-left-color: var(--warm-orange);
+            }
 
     .item-name {
         font-weight: 600;
-        color: #2c3e50;
+        color: var(--text-dark-brown);
+        font-size: 1.1rem;
     }
 
     .item-price {
-        color: #667eea;
-        font-weight: 600;
+        color: var(--warm-orange-dark);
+        font-weight: 700;
+        font-size: 1.1rem;
     }
 
     @@media (max-width: 768px) {
@@ -202,9 +239,9 @@
             padding: 2rem 1rem;
         }
 
-        .details-hero h1 {
-            font-size: 1.8rem;
-        }
+            .details-hero h1 {
+                font-size: 1.8rem;
+            }
 
         .card-body {
             padding: 1.5rem;
@@ -213,6 +250,12 @@
         .info-grid {
             grid-template-columns: 1fr;
             gap: 1rem;
+        }
+
+        .item-list li {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
         }
 
         .actions {
@@ -240,7 +283,7 @@
             <div class="card-body">
                 <div class="info-grid">
                     <div class="info-item">
-                        <div class="info-label"><i class="bi bi-clock"></i> Время на поръчка</div>
+                        <div class="info-label"><i class="bi bi-clock"></i> Време на поръчка</div>
                         <div class="info-value">@Model.OrderTime.ToString("dd.MM.yyyy HH:mm")</div>
                     </div>
 

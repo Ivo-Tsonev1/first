@@ -1,65 +1,609 @@
-@model IEnumerable<ByteBite.Models.Menu>
+﻿@model IEnumerable<ByteBite.Models.Dish>
 
 @{
-    ViewData["Title"] = "������";
+    ViewData["Title"] = "Меню";
 }
 
-<div class="page-wrapper">
-    <div class="page-header">
-        <div class="container">
-            <div class="header-content">
-                <h1><i class="bi bi-book"></i> ������</h1>
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="bi bi-plus-lg"></i> ���� ����
-                </a>
-            </div>
-        </div>
-    </div>
+<style>
+    /* ────────────────────────────────────────── */
+    /* HERO SECTION */
+    /* ────────────────────────────────────────── */
+    .menu-hero {
+        background: url('https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1600') center/cover;
+        color: white;
+        padding: 7rem 1rem 5rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
 
-    <div class="container content-wrapper">
-        @if (!Model.Any())
-        {
-            <div class="empty-state">
-                <i class="bi bi-inbox"></i>
-                <h2>���� ������</h2>
-                <p>������� � �������� �� ���� ����</p>
-            </div>
+        .menu-hero h1 {
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
-        else
-        {
-            <div class="table-responsive">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th><i class="bi bi-book-fill"></i> ��� �� ����</th>
-                            <th>��������</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    <span class="category-name">@Html.DisplayFor(modelItem => item.Name)</span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="����������">
-                                            <i class="bi bi-pencil-fill"></i>
-                                        </a>
-                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn-icon" title="������">
-                                            <i class="bi bi-eye-fill"></i>
-                                        </a>
-                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-icon btn-icon-danger" title="������">
-                                            <i class="bi bi-trash-fill"></i>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+
+        .menu-hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
         }
+
+    /* ────────────────────────────────────────── */
+    /* CONTROLS SECTION */
+    /* ────────────────────────────────────────── */
+    .menu-controls {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        margin-bottom: 3rem;
+    }
+
+    .control-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #2c1810;
+        margin-bottom: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: block;
+    }
+
+    .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .filter-btn {
+        padding: 0.7rem 1.5rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, #f5f0ea 0%, #ede7df 100%);
+        border: 2px solid #e0d5c8;
+        color: #4a2f1f;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        font-size: 0.95rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+        .filter-btn:hover {
+            background: linear-gradient(135deg, #e6d9cc 0%, #dcc9bc 100%);
+            border-color: #c2410c;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(194, 65, 12, 0.15);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #c2410c 0%, #a33a0a 100%);
+            color: white;
+            border-color: #c2410c;
+            box-shadow: 0 6px 20px rgba(194, 65, 12, 0.3);
+        }
+
+    .search-sort-wrapper {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-end;
+    }
+
+    .search-container {
+        position: relative;
+        flex: 1;
+        min-width: 250px;
+        max-width: 500px;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3.2rem;
+        border: 2px solid #d9c7b8;
+        border-radius: 12px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        background: #fafaf8;
+    }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #c2410c;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: #999;
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 1.2rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9c7a5e;
+        font-size: 1.2rem;
+    }
+
+    .sort-container {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        flex-shrink: 0;
+    }
+
+        .sort-container label {
+            font-weight: 600;
+            color: #2c1810;
+            font-size: 0.95rem;
+        }
+
+    .sort-select {
+        padding: 0.85rem 1rem;
+        border: 2px solid #d9c7b8;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        background: linear-gradient(135deg, #fafaf8 0%, #f5f0ea 100%);
+        color: #2c1810;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        font-weight: 500;
+        min-width: 220px;
+    }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #c2410c;
+            box-shadow: 0 0 0 4px rgba(194, 65, 12, 0.1);
+        }
+
+    /* ────────────────────────────────────────── */
+    /* GRID LAYOUT */
+    /* ────────────────────────────────────────── */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    /* ────────────────────────────────────────── */
+    /* CARD STYLES */
+    /* ────────────────────────────────────────── */
+    .card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+        }
+
+    .card-content {
+        padding: 1.5rem;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .card-content h3 {
+            margin: 0 0 0.8rem;
+            font-size: 1.2rem;
+            color: #2c1810;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .card-content .description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+    .card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #f0f0f0;
+        margin-top: auto;
+    }
+
+    .price {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #c2410c;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.7rem 1.3rem;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #c2410c 0%, #a33a0a 100%);
+        color: white;
+        box-shadow: 0 2px 8px rgba(194, 65, 12, 0.2);
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #a33a0a 0%, #8a2d08 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(194, 65, 12, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(194, 65, 12, 0.2);
+        }
+
+    /* ────────────────────────────────────────── */
+    /* NO RESULTS */
+    /* ────────────────────────────────────────── */
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        color: #999;
+        font-size: 1.1rem;
+    }
+
+        .no-results p {
+            margin: 0;
+            font-size: 1.3rem;
+        }
+
+    /* ────────────────────────────────────────── */
+    /* RESPONSIVE */
+    /* ────────────────────────────────────────── */
+    @@media (max-width: 1024px) {
+        .card-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .menu-controls {
+            padding: 2rem;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .menu-hero {
+            padding: 5rem 1rem 4rem;
+        }
+
+            .menu-hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .menu-hero p {
+                font-size: 1rem;
+            }
+
+        .menu-controls {
+            padding: 1.5rem;
+        }
+
+        .card-grid {
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.2rem;
+        }
+
+        .search-sort-wrapper {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 1rem;
+        }
+
+        .search-container {
+            max-width: none;
+        }
+
+        .sort-container {
+            width: 100%;
+        }
+
+        .sort-select {
+            width: 100%;
+            min-width: unset;
+        }
+
+        .filters {
+            gap: 0.6rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .menu-hero {
+            padding: 3rem 1rem 2rem;
+        }
+
+            .menu-hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .menu-hero p {
+                font-size: 0.95rem;
+            }
+
+        .card-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .card-content {
+            padding: 1rem;
+        }
+
+        .card img {
+            height: 180px;
+        }
+
+        .filters {
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .card-content h3 {
+            font-size: 1rem;
+        }
+
+        .price {
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+
+    /* ────────────────────────────────────────── */
+    /* UTILITIES */
+    /* ────────────────────────────────────────── */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    @@media (max-width: 768px) {
+        .container {
+            padding: 0 1.5rem;
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .container {
+            padding: 0 1rem;
+        }
+    }
+</style>
+
+<main>
+    <section class="menu-hero">
+        <div class="container">
+            <h1>🍽️ Нашето Меню</h1>
+            <p>Класически вкусове, пресни съставки и много любов във всяко ястие</p>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="menu-controls">
+            <span class="control-title">📂 Филтрирай по категория</span>
+            <div class="filters" id="categoryFilters">
+                <button class="filter-btn active" data-category="all">✓ Всички</button>
+            </div>
+
+            <div class="search-sort-wrapper">
+                <div class="search-container">
+                    <i class="bi bi-search search-icon"></i>
+                    <input type="text" class="search-input" id="dishSearch" placeholder="Търси ястие по име...">
+                </div>
+                <div class="sort-container">
+                    <label for="sortSelect">Подреди по:</label>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="">По подразбиране</option>
+                        <option value="name-asc">A-Z: А-Я</option>
+                        <option value="price-asc">💰 Цена: ниска → висока</option>
+                        <option value="price-desc">💰 Цена: висока → ниска</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="menu-content">
+            @if (!Model.Any())
+            {
+                <div class="no-results">
+                    <p>😕 Няма налични ястия в момента</p>
+                </div>
+            }
+            else
+            {
+                <div class="card-grid" id="dishesGrid">
+                    @foreach (var dish in Model)
+                    {
+                        <div class="card" data-category="@dish.Category?.Name ?? 'Other'" data-name="@dish.Title.ToLower()" data-price="@dish.Price">
+                            <img src="@(string.IsNullOrEmpty(dish.ImagePath) ? "/images/default-dish.jpg" : dish.ImagePath)"
+                                 alt="@dish.Title"
+                                 loading="lazy">
+
+                            <div class="card-content">
+                                <h3>@dish.Title</h3>
+                                @if (!string.IsNullOrEmpty(dish.Description))
+                                {
+                                    <p class="description">@dish.Description</p>
+                                }
+                                <div class="card-footer">
+                                    <span class="price">@dish.Price.ToString("F2") лв</span>
+                                    <a asp-action="Details" asp-route-id="@dish.Id" class="btn btn-primary">
+                                        <i class="bi bi-eye"></i> Детали
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            <div id="noResults" class="no-results hidden">
+                <p>😕 Няма намерени ястия по вашата заявка...</p>
+            </div>
+        </section>
     </div>
-</div>
+</main>
+
+<script>
+    const categoryFilters = document.getElementById('categoryFilters');
+    const dishesGrid = document.getElementById('dishesGrid');
+    const cards = document.querySelectorAll('.card');
+    const searchInput = document.getElementById('dishSearch');
+    const sortSelect = document.getElementById('sortSelect');
+    const noResults = document.getElementById('noResults');
+
+    // Get unique categories and create filter buttons
+    const categories = new Set();
+    cards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        if (category && category !== 'all') {
+            categories.add(category);
+        }
+    });
+
+    // Add category buttons dynamically
+    Array.from(categories).sort().forEach(category => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.setAttribute('data-category', category);
+        btn.textContent = category;
+        categoryFilters.appendChild(btn);
+    });
+
+    let activeCategory = 'all';
+    let searchTerm = '';
+    let sortType = '';
+
+    function updateDisplay() {
+        let visibleCount = 0;
+
+        cards.forEach(card => {
+            const category = card.getAttribute('data-category');
+            const name = card.getAttribute('data-name');
+
+            const categoryMatch = activeCategory === 'all' || category === activeCategory;
+            const searchMatch = name.includes(searchTerm.toLowerCase());
+
+            if (categoryMatch && searchMatch) {
+                card.style.display = '';
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        noResults.classList.toggle('hidden', visibleCount > 0);
+    }
+
+    function sortCards() {
+        if (!sortType) return;
+
+        const cardsArray = Array.from(cards).filter(card => card.style.display !== 'none');
+        const grid = document.getElementById('dishesGrid');
+
+        cardsArray.sort((a, b) => {
+            const aName = a.getAttribute('data-name');
+            const bName = b.getAttribute('data-name');
+            const aPrice = parseFloat(a.getAttribute('data-price'));
+            const bPrice = parseFloat(b.getAttribute('data-price'));
+
+            switch(sortType) {
+                case 'price-asc':
+                    return aPrice - bPrice;
+                case 'price-desc':
+                    return bPrice - aPrice;
+                case 'name-asc':
+                    return aName.localeCompare(bName, 'bg');
+                case 'name-desc':
+                    return bName.localeCompare(aName, 'bg');
+                default:
+                    return 0;
+            }
+        });
+
+        grid.innerHTML = '';
+        cardsArray.forEach(card => grid.appendChild(card));
+    }
+
+    // Event listeners
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeCategory = btn.getAttribute('data-category');
+            updateDisplay();
+        });
+    });
+
+    searchInput.addEventListener('input', (e) => {
+        searchTerm = e.target.value;
+        updateDisplay();
+    });
+
+    sortSelect.addEventListener('change', (e) => {
+        sortType = e.target.value;
+        sortCards();
+    });
+</script>
