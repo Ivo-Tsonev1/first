@@ -867,7 +867,6 @@ footer {
 
 /* About Page Styles */
 .about-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900174-b2905c5f76d7?w=1600') center/cover;
     color: white;
     padding: 5rem 1rem;
     text-align: center;
@@ -930,8 +929,7 @@ footer {
 
 /* Contact Page Styles - Improved */
 .contact-hero {
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600') center/cover;
-    color: white;
+    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/working.png') center/cover; 
     padding: 5rem 1rem;
     text-align: center;
     margin-bottom: 3rem;
@@ -1137,7 +1135,7 @@ footer {
 
 /* ── Contact Page Styles ── */
 .contact-hero {
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=1600') center/cover;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.5)), url('../images/working.png') center/cover;
     color: white;
     padding: 6rem 1rem 5rem;
     text-align: center;
