@@ -22,5 +22,6 @@ namespace ByteBite.Models
         public virtual IdentityUser Waiter { get; set; }
 
         public virtual ICollection<OrderItem> Items { get; set; } = new HashSet<OrderItem>();
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }

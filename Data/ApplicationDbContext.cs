@@ -20,12 +20,15 @@ namespace ByteBite.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure Dish.Price decimal precision
+            modelBuilder.Entity<Order>()
+                .HasMany(o => o.Items)
+                .WithOne(i => i.Order)
+                .HasForeignKey(i => i.OrderId);
+
             modelBuilder.Entity<Dish>()
                 .Property(d => d.Price)
                 .HasPrecision(10, 2);
 
-            // Configure Order.TotalPrice decimal precision
             modelBuilder.Entity<Order>()
                 .Property(o => o.TotalPrice)
                 .HasPrecision(10, 2);

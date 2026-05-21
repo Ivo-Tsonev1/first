@@ -1,14 +1,5 @@
 wwwroot\css\site.css
-wwwroot\css\style.css
 wwwroot\favicon.ico
-wwwroot\images\dishes\5bceb9c6-25f8-4cc0-9950-cad071442724_54160338775_3fae945ea4_k-1365x910.jpg
-wwwroot\images\dishes\6ad4a0a5-7fde-45e1-a43a-3edea2f1c7fe_domashna-musaka-s-kaima-i-kartofi-puhkava-zalivka.webp
-wwwroot\images\dishes\9e42608c-f82b-4c63-8c76-122b28b0a4e5_shopska-salata_thumb-blog_post.jpg
-wwwroot\images\dishes\d93fc032-ceb5-486a-9c2c-084016534a4f_guvetche25.webp
-wwwroot\images\favicon.png
-wwwroot\images\food.jpg
-wwwroot\images\main.png
-wwwroot\js\script.js
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
@@ -67,3 +58,12 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\js\script.js
+wwwroot\images\favicon.png
+wwwroot\images\food.jpg
+wwwroot\images\main.png
+wwwroot\css\style.css
+wwwroot\images\dishes\9e42608c-f82b-4c63-8c76-122b28b0a4e5_shopska-salata_thumb-blog_post.jpg
+wwwroot\images\dishes\d93fc032-ceb5-486a-9c2c-084016534a4f_guvetche25.webp
+wwwroot\images\dishes\6ad4a0a5-7fde-45e1-a43a-3edea2f1c7fe_domashna-musaka-s-kaima-i-kartofi-puhkava-zalivka.webp
+wwwroot\images\dishes\5bceb9c6-25f8-4cc0-9950-cad071442724_54160338775_3fae945ea4_k-1365x910.jpg

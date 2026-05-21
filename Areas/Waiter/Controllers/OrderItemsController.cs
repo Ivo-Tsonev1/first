@@ -58,18 +58,34 @@ namespace ByteBite.Areas.Waiter.Controllers
         }
 
         // POST: OrderItems/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderId,DishId,Quantity")] OrderItem orderItem)
         {
+            // We do not bind 'Price' from the form to prevent malicious tampering.
+            // Instead, we fetch it securely from the database.
             if (ModelState.IsValid)
             {
+                // 1. Fetch the dish from the database to get its current price
+                var dish = await _context.Dishes.FindAsync(orderItem.DishId);
+
+                if (dish != null)
+                {
+                    // 2. Snapshot the price at the time of the order
+                    orderItem.Price = dish.Price;
+                }
+
+                // 3. Save item to database
                 _context.Add(orderItem);
                 await _context.SaveChangesAsync();
+
+                // 4. Automatically recalculate the total of the associated order
+                await UpdateOrderTotal(orderItem.OrderId);
+
                 return RedirectToAction(nameof(Index));
             }
+
+            // Repopulate ViewDatas if ModelState is invalid
             ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Title", orderItem.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderItem.OrderId);
             return View(orderItem);
@@ -94,8 +110,6 @@ namespace ByteBite.Areas.Waiter.Controllers
         }
 
         // POST: OrderItems/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,DishId,Quantity")] OrderItem orderItem)
@@ -109,8 +123,18 @@ namespace ByteBite.Areas.Waiter.Controllers
             {
                 try
                 {
+                    // Ensure the snapshot price gets updated in case they edited the Dish type
+                    var dish = await _context.Dishes.FindAsync(orderItem.DishId);
+                    if (dish != null)
+                    {
+                        orderItem.Price = dish.Price;
+                    }
+
                     _context.Update(orderItem);
                     await _context.SaveChangesAsync();
+
+                    // Automatically recalculate total after editing
+                    await UpdateOrderTotal(orderItem.OrderId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -158,16 +182,40 @@ namespace ByteBite.Areas.Waiter.Controllers
             var orderItem = await _context.OrderItems.FindAsync(id);
             if (orderItem != null)
             {
+                // CRUCIAL: Store OrderId before we delete the item
+                int associatedOrderId = orderItem.OrderId;
+
                 _context.OrderItems.Remove(orderItem);
+                await _context.SaveChangesAsync();
+
+                // Automatically recalculate total after deleting an item
+                await UpdateOrderTotal(associatedOrderId);
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool OrderItemExists(int id)
         {
             return _context.OrderItems.Any(e => e.Id == id);
+        }
+
+        // Helper Method for automatic sum calculation
+        private async Task UpdateOrderTotal(int orderId)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Dish) // Includes Dish to access its Price
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order != null)
+            {
+                // Automatically compute sum: (Quantity * Dish.Price) for all items
+                order.TotalPrice = order.OrderItems.Sum(oi => oi.Quantity * oi.Dish.Price);
+
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
