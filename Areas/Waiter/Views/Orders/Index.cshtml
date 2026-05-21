@@ -9,7 +9,7 @@
         <div class="container">
             <div class="header-content">
                 <h1><i class="bi bi-receipt"></i> Поръчки</h1>
-                <a asp-action="Create" class="btn btn-primary">
+                <a asp-controller="DiningTables" asp-action="Index" class="btn btn-primary">
                     <i class="bi bi-plus-lg"></i> Нова поръчка
                 </a>
             </div>
@@ -53,23 +53,23 @@
                                     }
                                     else
                                     {
-                                        <span class="badge badge-warning">Непокрита</span>
+                                        <span class="badge badge-warning">Неплатена</span>
                                     }
                                 </td>
                                 <td>
-                                    <span class="price">@Html.DisplayFor(modelItem => item.TotalPrice) лв.</span>
+                                    <span class="price">@Html.DisplayFor(modelItem => item.TotalPrice) €</span>
                                 </td>
                                 <td>
-                                    <span class="badge badge-info">Маса @Html.DisplayFor(modelItem => item.DiningTable.Id)</span>
+                                    <span class="badge badge-info">Маса @Html.DisplayFor(modelItem => item.DiningTable.TableNumber)</span>
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Waiter.Id)
+                                    @Html.DisplayFor(modelItem => item.Waiter.Email)
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="Редактирай">
+                                        @* <a asp-action="Edit" asp-route-id="@item.Id" class="btn-icon" title="Редактирай">
                                             <i class="bi bi-pencil-fill"></i>
-                                        </a>
+                                        </a> *@
                                         <a asp-action="Details" asp-route-id="@item.Id" class="btn-icon" title="Детали">
                                             <i class="bi bi-eye-fill"></i>
                                         </a>

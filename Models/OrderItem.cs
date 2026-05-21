@@ -7,10 +7,8 @@ namespace ByteBite.Models
     {
         public int Id { get; set; }
 
-        // The actual database column
         public int OrderId { get; set; }
 
-        // Tell EF Core specifically to use the integer above for this relationship
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 

@@ -1,49 +1,69 @@
 ﻿@model ByteBite.Models.Order
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Order";
 }
 
-<h1>Edit</h1>
+<style>
+    .form-container {
+        background-color: #ffffff;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
 
-<h4>Order</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="OrderTime" class="control-label"></label>
-                <input asp-for="OrderTime" class="form-control" />
-                <span asp-validation-for="OrderTime" class="text-danger"></span>
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .control-label {
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6 form-container">
+            <h2 class="mb-4">Edit Order</h2>
+            <hr />
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="OrderTime" class="control-label"></label>
+                    <input asp-for="OrderTime" class="form-control" />
+                    <span asp-validation-for="OrderTime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DiningTableId" class="control-label"></label>
+                    <select asp-for="DiningTableId" class="form-select" asp-items="ViewBag.DiningTableId"></select>
+                    <span asp-validation-for="DiningTableId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="WaiterId" class="control-label"></label>
+                    <select asp-for="WaiterId" class="form-select" asp-items="ViewBag.WaiterId"></select>
+                    <span asp-validation-for="WaiterId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                </div>
+            </form>
+
+            <div class="mt-3 text-center">
+                <a asp-action="Index" class="text-decoration-none text-muted">Back to List</a>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPaid" /> @Html.DisplayNameFor(model => model.IsPaid)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="DiningTableId" class="control-label"></label>
-                <select asp-for="DiningTableId" class="form-control" asp-items="ViewBag.DiningTableId"></select>
-                <span asp-validation-for="DiningTableId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="WaiterId" class="control-label"></label>
-                <select asp-for="WaiterId" class="form-control" asp-items="ViewBag.WaiterId"></select>
-                <span asp-validation-for="WaiterId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

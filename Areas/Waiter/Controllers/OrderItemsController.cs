@@ -62,30 +62,23 @@ namespace ByteBite.Areas.Waiter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,OrderId,DishId,Quantity")] OrderItem orderItem)
         {
-            // We do not bind 'Price' from the form to prevent malicious tampering.
-            // Instead, we fetch it securely from the database.
             if (ModelState.IsValid)
             {
-                // 1. Fetch the dish from the database to get its current price
                 var dish = await _context.Dishes.FindAsync(orderItem.DishId);
 
                 if (dish != null)
                 {
-                    // 2. Snapshot the price at the time of the order
                     orderItem.Price = dish.Price;
                 }
 
-                // 3. Save item to database
                 _context.Add(orderItem);
                 await _context.SaveChangesAsync();
 
-                // 4. Automatically recalculate the total of the associated order
                 await UpdateOrderTotal(orderItem.OrderId);
 
                 return RedirectToAction(nameof(Index));
             }
 
-            // Repopulate ViewDatas if ModelState is invalid
             ViewData["DishId"] = new SelectList(_context.Dishes, "Id", "Title", orderItem.DishId);
             ViewData["OrderId"] = new SelectList(_context.Orders, "Id", "Id", orderItem.OrderId);
             return View(orderItem);
