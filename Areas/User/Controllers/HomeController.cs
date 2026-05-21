@@ -2,8 +2,9 @@ using System.Diagnostics;
 using ByteBite.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ByteBite.Controllers
+namespace ByteBite.Areas.User.Controllers
 {
+    [Area("User")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

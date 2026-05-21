@@ -4,8 +4,9 @@ using ByteBite.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace ByteBite.Controllers
+namespace ByteBite.Areas.User.Controllers
 {
+    [Area("User")]
     public class MenusController : Controller
     {
         private readonly ApplicationDbContext _context;

@@ -7,15 +7,19 @@ namespace ByteBite.Models
     {
         public int Id { get; set; }
 
+        // The actual database column
         public int OrderId { get; set; }
-        public virtual Order Order { get; set; }
+
+        // Tell EF Core specifically to use the integer above for this relationship
+        [ForeignKey("OrderId")]
+        public Order Order { get; set; }
 
         public int DishId { get; set; }
-        public virtual Dish Dish { get; set; }
+
+        [ForeignKey("DishId")]
+        public Dish Dish { get; set; }
 
         public int Quantity { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]    
         public decimal Price { get; set; }
     }
 }
